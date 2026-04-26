@@ -146,3 +146,20 @@ body {
   border-radius: 50%;
   animation: pulse-live 2s infinite;
 }
+
+/* PRO UI Styles */
+.hero-section { text-align: center; padding: 80px 20px; background: radial-gradient(circle at center, rgba(112, 0, 255, 0.15) 0%, transparent 70%); margin-bottom: 40px; border-radius: 24px; }
+.hero-section h1 { font-size: 48px; margin-bottom: 15px; letter-spacing: -1px; }
+.search-bar-pro { display: flex; align-items: center; max-width: 800px; margin: 40px auto 0; background: var(--bg-surface); border: 1px solid var(--border-color); padding: 8px 8px 8px 20px; border-radius: 16px; gap: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+.search-bar-pro input { flex: 1; background: transparent; border: none; color: white; font-size: 16px; outline: none; }
+.scanning-overlay { position: fixed; inset: 0; background: rgba(7, 9, 13, 0.98); backdrop-filter: blur(20px); z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
+.terminal-box { width: 100%; max-width: 700px; height: 250px; background: rgba(0,0,0,0.7); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-top: 30px; font-family: monospace; font-size: 13px; color: #00ff41; overflow-y: auto; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
+.results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 0 10px; }
+.export-btn { display: flex; align-items: center; gap: 8px; background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+.export-btn:hover { background: var(--bg-hover); color: white; border-color: var(--accent-primary); }
+.filter-group { display: flex; gap: 10px; }
+.filter-btn { padding: 8px 20px; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-muted); cursor: pointer; transition: 0.3s; }
+.filter-btn.active { background: var(--accent-gradient); color: white; border-color: transparent; box-shadow: 0 0 20px rgba(112, 0, 255, 0.3); }
+.pagination { display: flex; justify-content: center; gap: 10px; margin-top: 50px; padding-bottom: 50px; }
+.page-btn { width: 40px; height: 40px; border-radius: 10px; background: var(--bg-surface); border: 1px solid var(--border-color); color: white; cursor: pointer; transition: 0.2s; }
+.page-btn.active { background: var(--accent-primary); border-color: var(--accent-primary); box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); }
