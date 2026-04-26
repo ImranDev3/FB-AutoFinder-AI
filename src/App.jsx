@@ -128,7 +128,7 @@ const GroupDetailsModal = ({ group, onClose }) => (
       </div>
 
       <div style={{ display: 'flex', gap: '15px' }}>
-        <button className="glow-btn" style={{ flex: 1 }} onClick={() => window.open(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(group.name)}`, '_blank')}>
+        <button className="glow-btn" style={{ flex: 1 }} onClick={() => window.open(`https://www.facebook.com/search/groups/?q=${encodeURIComponent(group.name)}`, '_blank')}>
           Open Group on Facebook
         </button>
         <button style={{ flex: 1, padding: '12px', borderRadius: '12px', background: 'var(--bg-hover)', border: '1px solid var(--border-color)', color: 'white', cursor: 'pointer' }} onClick={onClose}>
@@ -178,10 +178,17 @@ const GroupListItem = ({ group, onViewDetails }) => (
     
     <div style={{ display: 'flex', gap: '10px' }}>
       <button 
-        onClick={() => window.open(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(group.name)}`, '_blank')}
+        onClick={() => window.open(`https://www.facebook.com/search/groups/?q=${encodeURIComponent(group.name)}`, '_blank')}
         style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(0, 242, 255, 0.1)', border: '1px solid var(--accent-primary)', color: 'var(--accent-primary)', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
       >
         Join Now
+      </button>
+      <button 
+        onClick={() => { navigator.clipboard.writeText(group.name); alert('Group name copied! You can paste it in Facebook.'); }}
+        style={{ padding: '8px 12px', borderRadius: '8px', background: 'var(--bg-hover)', border: '1px solid var(--border-color)', color: 'white', fontSize: '12px', cursor: 'pointer' }}
+        title="Copy Name"
+      >
+        Copy
       </button>
       <button 
         onClick={() => onViewDetails(group)}
@@ -301,19 +308,19 @@ const Home = () => {
 
   const generateDynamicResults = (term) => {
     const dynamic = [];
-    const niches = ['Community', 'Discussion', 'Official', 'Marketplace', 'Network', 'Support', 'Fans', 'Hustlers'];
-    const suffixes = ['Global', '2024', 'Verified', 'Elite', 'Secret', 'Premium', 'Public'];
+    const prefixes = ['', 'The Best ', 'Official ', 'Live ', 'Global '];
+    const niches = ['Marketing Hub', 'Freelance Community', 'Hiring Group', 'Buy & Sell', 'Tech Support', 'Crypto Alerts', 'Affiliate Network'];
     
     for (let i = 1; i <= 50; i++) {
+      const prefix = prefixes[i % prefixes.length];
       const niche = niches[i % niches.length];
-      const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
       dynamic.push({
         id: Date.now() + i,
-        name: `${term} ${suffix} ${niche} ${i > 10 ? i : ''}`,
+        name: `${prefix}${term} ${niche} ${i > 10 ? i : ''}`.trim(),
         members: `${(Math.random() * 450 + 10).toFixed(1)}K`,
         activity: ['High', 'Medium', 'Very High', 'Explosive'][i % 4],
-        type: Math.random() > 0.2 ? 'Public' : 'Private',
-        autoApproval: Math.random() > 0.35,
+        type: 'Public',
+        autoApproval: Math.random() > 0.4,
         postFrequency: `${Math.floor(Math.random() * 80) + 10} posts/day`
       });
     }
