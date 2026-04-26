@@ -1,0 +1,17 @@
+export const mockGroups = [
+  { id: 1, name: 'Crypto Alpha Signals', members: '124K', activity: 'High', type: 'Public', autoApproval: true, postFrequency: '45 posts/day' },
+  { id: 2, name: 'Digital Marketing Mastery', members: '89K', activity: 'Medium', type: 'Public', autoApproval: true, postFrequency: '12 posts/day' },
+  { id: 3, name: 'React JS Developers Hub', members: '256K', activity: 'Very High', type: 'Public', autoApproval: false, postFrequency: '80 posts/day' },
+  { id: 4, name: 'Affiliate Marketing Secrets', members: '56K', activity: 'High', type: 'Public', autoApproval: true, postFrequency: '25 posts/day' },
+  { id: 5, name: 'Freelance Graphics Design', members: '112K', activity: 'Medium', type: 'Public', autoApproval: true, postFrequency: '15 posts/day' },
+  { id: 6, name: 'Python Automation Experts', members: '78K', activity: 'High', type: 'Public', autoApproval: false, postFrequency: '30 posts/day' },
+  { id: 7, name: 'Stock Market Daily', members: '150K', activity: 'Very High', type: 'Public', autoApproval: true, postFrequency: '60 posts/day' },
+  { id: 8, name: 'UI/UX Inspiration Daily', members: '45K', activity: 'Low', type: 'Public', autoApproval: true, postFrequency: '5 posts/day' },
+  { id: 9, name: 'Next.js Enthusiasts', members: '32K', activity: 'Medium', type: 'Public', autoApproval: false, postFrequency: '10 posts/day' },
+  { id: 10, name: 'Forex Trading Community', members: '210K', activity: 'High', type: 'Public', autoApproval: true, postFrequency: '50 posts/day' },
+  { id: 11, name: 'Paid VPN & Proxy Deals', members: '15K', activity: 'Medium', type: 'Public', autoApproval: true, postFrequency: '8 posts/day' },
+  { id: 12, name: 'Premium VPN Discounts', members: '42K', activity: 'High', type: 'Public', autoApproval: true, postFrequency: '22 posts/day' },
+  { id: 13, name: 'VPN Security & Privacy', members: '98K', activity: 'Very High', type: 'Public', autoApproval: false, postFrequency: '35 posts/day' },
+  { id: 14, name: 'E-commerce Dropshipping 2024', members: '340K', activity: 'High', type: 'Public', autoApproval: true, postFrequency: '100 posts/day' },
+  { id: 15, name: 'Shopify Growth Hackers', members: '67K', activity: 'Medium', type: 'Public', autoApproval: true, postFrequency: '18 posts/day' },
+];
