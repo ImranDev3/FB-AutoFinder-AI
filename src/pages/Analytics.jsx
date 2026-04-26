@@ -1,129 +1,96 @@
 import React from 'react';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-  ArcElement
-} from 'chart.js';
-import { Line, Bar, Doughnut } from 'react-chartjs-2';
 import { motion } from 'framer-motion';
-import { TrendingUp, Users, Zap, Activity } from 'lucide-react';
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line
+} from 'recharts';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
+const Analytics = ({ results = [] }) => {
+  // Process real data from results
+  const data = results.length > 0 ? results.slice(0, 5).map(g => ({
+    name: g.name.substring(0, 10) + '...',
+    members: parseInt(g.members.replace(/[^0-9.]/g, '')) * (g.members.includes('M') ? 1000 : 1),
+    activity: g.autoApproval ? 95 : 40
+  })) : [
+    { name: 'Group A', members: 4000, activity: 80 },
+    { name: 'Group B', members: 3000, activity: 90 },
+    { name: 'Group C', members: 2000, activity: 70 },
+  ];
 
-const Analytics = () => {
-  const lineData = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    datasets: [
-      {
-        label: 'Auto-Approval Groups Found',
-        data: [12, 19, 15, 25, 22, 30, 45],
-        fill: true,
-        backgroundColor: 'rgba(0, 242, 255, 0.1)',
-        borderColor: '#00f2ff',
-        tension: 0.4,
-      },
-    ],
-  };
+  const pieData = [
+    { name: 'Auto-Approval', value: results.filter(g => g.autoApproval).length || 10 },
+    { name: 'Moderated', value: results.filter(g => !g.autoApproval).length || 5 },
+  ];
 
-  const barData = {
-    labels: ['Crypto', 'Marketing', 'Jobs', 'E-commerce', 'Design'],
-    datasets: [
-      {
-        label: 'Group Activity Level',
-        data: [85, 60, 75, 50, 90],
-        backgroundColor: 'rgba(112, 0, 255, 0.6)',
-        borderRadius: 10,
-      },
-    ],
-  };
-
-  const doughnutData = {
-    labels: ['Auto-Approve', 'Admin Approval'],
-    datasets: [
-      {
-        data: [65, 35],
-        backgroundColor: ['#00f2ff', '#7000ff'],
-        borderWidth: 0,
-      },
-    ],
-  };
-
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-    },
-    scales: {
-      y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } },
-      x: { grid: { display: false }, ticks: { color: '#94a3b8' } },
-    },
-  };
+  const COLORS = ['#00f2ff', '#7000ff', '#22c55e', '#ef4444'];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', marginBottom: '30px' }}>
-        <div className="card">
-          <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '10px' }}><Users size={16} /> Total Scanned</p>
-          <h2 style={{ fontSize: '28px' }}>1.2M</h2>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="page-content">
+      <div style={{ marginBottom: '30px' }}>
+        <h1>Data <span style={{ color: 'var(--accent-primary)' }}>Analytics</span></h1>
+        <p style={{ color: 'var(--text-muted)' }}>Real-time visualization of current scraping results.</p>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
+        <div className="card" style={{ height: '350px', padding: '20px' }}>
+          <h3 style={{ marginBottom: '20px' }}>Member Distribution</h3>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <XAxis dataKey="name" stroke="var(--text-muted)" fontSize={12} />
+              <YAxis stroke="var(--text-muted)" fontSize={12} />
+              <Tooltip 
+                contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '8px' }}
+              />
+              <Bar dataKey="members" fill="var(--accent-primary)" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
-        <div className="card">
-          <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '10px' }}><Zap size={16} /> Auto-Approval</p>
-          <h2 style={{ fontSize: '28px', color: 'var(--accent-primary)' }}>450K</h2>
-        </div>
-        <div className="card">
-          <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '10px' }}><TrendingUp size={16} /> Growth Rate</p>
-          <h2 style={{ fontSize: '28px', color: '#22c55e' }}>+24%</h2>
-        </div>
-        <div className="card">
-          <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '10px' }}><Activity size={16} /> Active Filters</p>
-          <h2 style={{ fontSize: '28px' }}>12</h2>
+
+        <div className="card" style={{ height: '350px', padding: '20px' }}>
+          <h3 style={{ marginBottom: '20px' }}>Approval Status Ratio</h3>
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={pieData}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={100}
+                paddingAngle={5}
+                dataKey="value"
+              >
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
-        <div className="card" style={{ height: '400px' }}>
-          <h3 style={{ marginBottom: '20px' }}>Scanned Groups Frequency</h3>
-          <div style={{ height: '300px' }}>
-            <Line data={lineData} options={options} />
-          </div>
-        </div>
-        <div className="card" style={{ height: '400px' }}>
-          <h3 style={{ marginBottom: '20px' }}>Approval Status</h3>
-          <div style={{ height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Doughnut data={doughnutData} />
-          </div>
-        </div>
-      </div>
-
-      <div className="card" style={{ marginTop: '20px', height: '350px' }}>
-        <h3 style={{ marginBottom: '20px' }}>Niche Activity Analytics</h3>
-        <div style={{ height: '250px' }}>
-          <Bar data={barData} options={options} />
-        </div>
+      <div className="card" style={{ height: '300px', padding: '20px' }}>
+        <h3 style={{ marginBottom: '20px' }}>Engagement Growth (Projected)</h3>
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+            <XAxis dataKey="name" stroke="var(--text-muted)" fontSize={12} />
+            <YAxis stroke="var(--text-muted)" fontSize={12} />
+            <Tooltip />
+            <Line type="monotone" dataKey="activity" stroke="var(--accent-primary)" strokeWidth={3} />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     </motion.div>
   );
