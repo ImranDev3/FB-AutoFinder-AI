@@ -1,19 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line
-} from 'recharts';
 
 const Analytics = ({ results = [] }) => {
   // Process real data from results
@@ -27,70 +13,72 @@ const Analytics = ({ results = [] }) => {
     { name: 'Group C', members: 2000, activity: 70 },
   ];
 
-  const pieData = [
-    { name: 'Auto-Approval', value: results.filter(g => g.autoApproval).length || 10 },
-    { name: 'Moderated', value: results.filter(g => !g.autoApproval).length || 5 },
-  ];
-
-  const COLORS = ['#00f2ff', '#7000ff', '#22c55e', '#ef4444'];
+  const maxMembers = Math.max(...data.map(d => d.members));
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="page-content">
       <div style={{ marginBottom: '30px' }}>
         <h1>Data <span style={{ color: 'var(--accent-primary)' }}>Analytics</span></h1>
-        <p style={{ color: 'var(--text-muted)' }}>Real-time visualization of current scraping results.</p>
+        <p style={{ color: 'var(--text-muted)' }}>Enterprise-grade visualization (Pure Engine).</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
-        <div className="card" style={{ height: '350px', padding: '20px' }}>
-          <h3 style={{ marginBottom: '20px' }}>Member Distribution</h3>
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-              <XAxis dataKey="name" stroke="var(--text-muted)" fontSize={12} />
-              <YAxis stroke="var(--text-muted)" fontSize={12} />
-              <Tooltip 
-                contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '8px' }}
-              />
-              <Bar dataKey="members" fill="var(--accent-primary)" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+        {/* SVG Bar Chart */}
+        <div className="card" style={{ padding: '25px' }}>
+          <h3 style={{ marginBottom: '25px' }}>Member Distribution</h3>
+          <div style={{ height: '250px', display: 'flex', alignItems: 'flex-end', gap: '15px', paddingBottom: '20px', borderBottom: '1px solid var(--border-color)' }}>
+            {data.map((d, i) => (
+              <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                <motion.div 
+                  initial={{ height: 0 }}
+                  animate={{ height: `${(d.members / maxMembers) * 100}%` }}
+                  style={{ width: '100%', background: 'var(--accent-primary)', borderRadius: '4px 4px 0 0', position: 'relative' }}
+                >
+                  <div style={{ position: 'absolute', top: '-25px', left: '50%', transform: 'translateX(-50%)', fontSize: '10px' }}>{d.members >= 1000 ? (d.members/1000).toFixed(1)+'K' : d.members}</div>
+                </motion.div>
+                <span style={{ fontSize: '10px', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>{d.name}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="card" style={{ height: '350px', padding: '20px' }}>
-          <h3 style={{ marginBottom: '20px' }}>Approval Status Ratio</h3>
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={100}
-                paddingAngle={5}
-                dataKey="value"
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+        {/* SVG Progress Bars for Activity */}
+        <div className="card" style={{ padding: '25px' }}>
+          <h3 style={{ marginBottom: '25px' }}>Group Engagement Levels</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {data.map((d, i) => (
+              <div key={i}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '12px' }}>
+                  <span>{d.name}</span>
+                  <span style={{ color: 'var(--accent-primary)' }}>{d.activity}%</span>
+                </div>
+                <div style={{ height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${d.activity}%` }}
+                    style={{ height: '100%', background: 'var(--accent-gradient)' }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="card" style={{ height: '300px', padding: '20px' }}>
-        <h3 style={{ marginBottom: '20px' }}>Engagement Growth (Projected)</h3>
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-            <XAxis dataKey="name" stroke="var(--text-muted)" fontSize={12} />
-            <YAxis stroke="var(--text-muted)" fontSize={12} />
-            <Tooltip />
-            <Line type="monotone" dataKey="activity" stroke="var(--accent-primary)" strokeWidth={3} />
-          </LineChart>
-        </ResponsiveContainer>
+      {/* Stats Summary */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
+        <div className="card" style={{ padding: '25px', textAlign: 'center' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginBottom: '5px' }}>TOTAL RESULTS</p>
+          <h2 style={{ fontSize: '32px' }}>{results.length}</h2>
+        </div>
+        <div className="card" style={{ padding: '25px', textAlign: 'center' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginBottom: '5px' }}>AUTO-APPROVE</p>
+          <h2 style={{ fontSize: '32px', color: '#22c55e' }}>{results.filter(g => g.autoApproval).length}</h2>
+        </div>
+        <div className="card" style={{ padding: '25px', textAlign: 'center' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginBottom: '5px' }}>GLOBAL NODES</p>
+          <h2 style={{ fontSize: '32px', color: 'var(--accent-primary)' }}>14</h2>
+        </div>
       </div>
     </motion.div>
   );
