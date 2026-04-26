@@ -35,17 +35,27 @@ import * as XLSX from 'xlsx';
 import { mockGroups } from './data/mockData';
 import Analytics from './pages/Analytics';
 
+// --- Global Fix: Clear corrupted storage ---
+if (!Array.isArray(JSON.parse(localStorage.getItem('results') || '[]'))) {
+  localStorage.removeItem('results');
+}
+
 // --- Shared State Manager ---
 const useStore = (key, initialValue) => {
   const [value, setValue] = useState(() => {
     try {
       const saved = localStorage.getItem(key);
-      return saved ? JSON.parse(saved) : initialValue;
+      if (!saved) return initialValue;
+      const parsed = JSON.parse(saved);
+      // Ensure type consistency
+      if (Array.isArray(initialValue) && !Array.isArray(parsed)) return initialValue;
+      return parsed;
     } catch (e) {
       console.error("Storage error:", e);
       return initialValue;
     }
   });
+
   useEffect(() => {
     try {
       localStorage.setItem(key, JSON.stringify(value));
@@ -53,10 +63,11 @@ const useStore = (key, initialValue) => {
       console.error("Save error:", e);
     }
   }, [key, value]);
+
   return [value, setValue];
 };
 
-// --- Open Source Layout Components ---
+// --- Layout Components ---
 
 const Sidebar = () => (
   <aside className="sidebar">
@@ -85,9 +96,6 @@ const Sidebar = () => (
     <div style={{ marginTop: 'auto', padding: '20px', background: 'rgba(34, 197, 94, 0.05)', borderRadius: '15px', border: '1px solid #22c55e' }}>
       <p style={{ fontSize: '11px', color: '#22c55e', fontWeight: '800', marginBottom: '5px' }}>OPEN SOURCE v5.0</p>
       <p style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Free Forever for Community</p>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '10px', color: '#ef4444', fontSize: '10px' }}>
-        <Heart size={10} fill="#ef4444" /> Developed by Imran Dev
-      </div>
     </div>
   </aside>
 );
@@ -96,28 +104,25 @@ const Topbar = () => (
   <header className="topbar">
     <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
       <div className="live-badge" />
-      <span style={{ fontSize: '13px', fontWeight: '600', color: '#22c55e' }}>CONNECTED TO META GLOBAL EDGE</span>
+      <span style={{ fontSize: '13px', fontWeight: '600', color: '#22c55e' }}>CONNECTED TO META GLOBAL NODES</span>
     </div>
     
     <div style={{ display: 'flex', alignItems: 'center', gap: '25px' }}>
       <div style={{ display: 'flex', gap: '15px', borderRight: '1px solid var(--border-color)', paddingRight: '20px' }}>
         <div style={{ textAlign: 'right' }}>
-           <p style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Status</p>
-           <p style={{ fontSize: '12px', fontWeight: '800', color: '#22c55e' }}>UNLIMITED ACCESS</p>
+           <p style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Scraper Engine</p>
+           <p style={{ fontSize: '12px', fontWeight: '800', color: '#22c55e' }}>ONLINE</p>
         </div>
       </div>
-      <a href="https://github.com/ImranDev3" target="_blank" rel="noreferrer" style={{ color: 'white' }}>
-        <Github size={20} />
-      </a>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'var(--bg-hover)', padding: '6px 12px', borderRadius: '30px', border: '1px solid var(--border-color)', cursor: 'pointer' }}>
-        <div style={{ width: '28px', height: '28px', background: 'var(--accent-gradient)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '900' }}>AD</div>
-        <span style={{ fontSize: '13px', fontWeight: '700' }}>Admin_Imran</span>
+        <div style={{ width: '24px', height: '24px', background: 'var(--accent-gradient)', borderRadius: '50%' }}></div>
+        <span style={{ fontSize: '12px' }}>Admin_Imran</span>
       </div>
     </div>
   </header>
 );
 
-const Dashboard = ({ results, setResults, history, setHistory }) => {
+const Dashboard = ({ results = [], setResults, history = [], setHistory }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isScanning, setIsScanning] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
@@ -133,41 +138,30 @@ const Dashboard = ({ results, setResults, history, setHistory }) => {
     setIsScanning(false);
   };
 
-  const handleJoin = (groupName) => {
-    const url = `https://www.facebook.com/search/groups/?q=${encodeURIComponent(groupName)}`;
-    window.open(url, '_blank');
-  };
-
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="page-content">
       <div className="card" style={{ padding: '40px', background: 'linear-gradient(135deg, rgba(0, 242, 255, 0.05), transparent)', marginBottom: '30px' }}>
-        <h1 style={{ fontSize: '32px', marginBottom: '10px' }}>Community <span style={{ color: 'var(--accent-primary)' }}>Intelligence Dashboard</span></h1>
-        <p style={{ color: 'var(--text-muted)', marginBottom: '30px' }}>100% Free Open-Source Facebook Group Discovery Tool.</p>
+        <h1 style={{ fontSize: '32px', marginBottom: '10px' }}>Intelligence <span style={{ color: 'var(--accent-primary)' }}>Command Center</span></h1>
+        <p style={{ color: 'var(--text-muted)', marginBottom: '30px' }}>Find and analyze Facebook groups instantly.</p>
         <div className="search-bar-pro" style={{ padding: '10px 20px', borderRadius: '15px' }}>
           <Search size={20} color="var(--text-muted)" />
-          <input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} onKeyPress={e => e.key === 'Enter' && handleSearch()} placeholder="Search niches: Paid VPN, Crypto, Marketing..." />
-          <button onClick={handleSearch} className="glow-btn" style={{ borderRadius: '10px', padding: '10px 25px' }}>START SCAN</button>
+          <input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} onKeyPress={e => e.key === 'Enter' && handleSearch()} placeholder="Search keywords..." />
+          <button onClick={handleSearch} className="glow-btn" style={{ borderRadius: '10px', padding: '10px 25px' }}>SCAN NOW</button>
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-         <h3>Discovery Feed ({results.length})</h3>
-         <button onClick={() => { const ws = XLSX.utils.json_to_sheet(results); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Report"); XLSX.writeFile(wb, "FB_Groups_Free_Report.xlsx"); }} className="export-btn"><Download size={14} /> DOWNLOAD FULL EXCEL</button>
-      </div>
-
       <div className="results-container">
-        {results.map(g => (
+        {Array.isArray(results) && results.map(g => (
           <motion.div key={g.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="card" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '15px', marginBottom: '15px', border: '1px solid var(--border-color)' }}>
              <img src={g.image} style={{ width: '64px', height: '64px', borderRadius: '12px', objectFit: 'cover' }} />
              <div style={{ flex: 1 }}>
                 <h4 style={{ fontSize: '17px', fontWeight: '800' }}>{g.name}</h4>
                 <div style={{ display: 'flex', gap: '20px', fontSize: '12px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                   <span><Users size={12} /> {g.members}</span>
-                   <span style={{ color: g.autoApproval ? '#22c55e' : '#ef4444' }}><Zap size={12} fill="currentColor" /> {g.autoApproval ? 'Auto-Approve' : 'Admin'}</span>
-                   <span><Clock size={12} /> {g.postFrequency}</span>
+                   <span>{g.members} members</span>
+                   <span style={{ color: g.autoApproval ? '#22c55e' : '#ef4444' }}>{g.autoApproval ? 'Auto-Approve' : 'Admin'}</span>
                 </div>
              </div>
-             <button onClick={() => handleJoin(g.name)} className="glow-btn" style={{ padding: '8px 20px', fontSize: '13px' }}>JOIN</button>
+             <button onClick={() => window.open(`https://www.facebook.com/search/groups/?q=${encodeURIComponent(g.name)}`, '_blank')} className="glow-btn" style={{ padding: '8px 20px', fontSize: '13px' }}>JOIN</button>
           </motion.div>
         ))}
       </div>
@@ -176,12 +170,7 @@ const Dashboard = ({ results, setResults, history, setHistory }) => {
         {isScanning && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="scanning-overlay">
             <Zap size={64} color="var(--accent-primary)" className="pulse-animation" />
-            <h2 style={{ marginTop: '25px', fontSize: '32px' }}>Scanning Community Nodes...</h2>
-            <div className="terminal-box" style={{ maxWidth: '600px' }}>
-               <div>[OPEN-SOURCE] Initializing Node #72... OK</div>
-               <div>[NET] Injecting search query: {searchTerm}</div>
-               <div>[DATA] Unlimited Scans Active.</div>
-            </div>
+            <h2 style={{ marginTop: '25px', fontSize: '32px' }}>Scraping Meta CDN...</h2>
           </motion.div>
         )}
       </AnimatePresence>
@@ -191,21 +180,14 @@ const Dashboard = ({ results, setResults, history, setHistory }) => {
 
 const SettingsPage = ({ config, setConfig }) => (
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="page-content">
-    <h1 style={{ marginBottom: '30px' }}>System <span style={{ color: 'var(--accent-primary)' }}>Settings</span></h1>
-    <div className="card" style={{ maxWidth: '600px', padding: '30px' }}>
-       <h3 style={{ marginBottom: '20px' }}>Global Configuration</h3>
-       <div style={{ marginBottom: '20px' }}>
-          <label style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Proxy Node</label>
-          <select value={config.proxy} onChange={e => setConfig({...config, proxy: e.target.value})} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', padding: '12px', borderRadius: '8px', color: 'white', marginTop: '5px' }}>
-             <option>AUTO-OPTIMIZE</option>
-             <option>US-EAST-1</option>
-             <option>ASIA-SOUTH-1</option>
-          </select>
-       </div>
-       <div style={{ padding: '15px', background: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', borderRadius: '10px', fontSize: '13px' }}>
-          <strong>FREE VERSION:</strong> All features unlocked. No license key required.
-       </div>
-       <button onClick={() => alert('Settings Saved!')} className="glow-btn" style={{ width: '100%', marginTop: '20px' }}>SAVE CHANGES</button>
+    <h1>Settings</h1>
+    <div className="card" style={{ maxWidth: '600px', padding: '30px', marginTop: '20px' }}>
+       <label>Proxy Node</label>
+       <select value={config.proxy} onChange={e => setConfig({...config, proxy: e.target.value})} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', padding: '12px', borderRadius: '8px', color: 'white', marginTop: '10px' }}>
+          <option>AUTO-OPTIMIZE</option>
+          <option>US-EAST-1</option>
+       </select>
+       <button onClick={() => alert('Saved!')} className="glow-btn" style={{ width: '100%', marginTop: '20px' }}>SAVE</button>
     </div>
   </motion.div>
 );
@@ -225,7 +207,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Dashboard results={results} setResults={setResults} history={history} setHistory={setHistory} />} />
               <Route path="/analytics" element={<Analytics results={results} />} />
-              <Route path="/history" element={<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card"><h2>Activity Logs</h2><table style={{ width: '100%', marginTop: '20px' }}><thead><tr align="left"><th>Term</th><th>Date</th><th>Results</th></tr></thead><tbody>{history.map((h, i) => <tr key={i}><td>{h.term}</td><td>{h.date}</td><td>{h.count}</td></tr>)}</tbody></table></motion.div>} />
+              <Route path="/history" element={<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card"><h2>Logs</h2><table><tbody>{Array.isArray(history) && history.map((h, i) => <tr key={i}><td>{h.term}</td><td>{h.date}</td></tr>)}</tbody></table></motion.div>} />
               <Route path="/settings" element={<SettingsPage config={config} setConfig={setConfig} />} />
             </Routes>
           </div>
