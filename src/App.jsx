@@ -268,17 +268,19 @@ const Home = () => {
   const generateDynamicResults = (term) => {
     const dynamic = [];
     const niches = ['Marketing Hub', 'Freelance Community', 'Hiring Group', 'Buy & Sell', 'Tech Support', 'Crypto Alerts', 'Affiliate Network'];
-    const locations = ['New York, USA', 'London, UK', 'Dubai, UAE', 'Mumbai, India', 'Berlin, Germany', 'Sydney, Australia'];
-    const communityImages = [
+    const locations = ['New York, USA', 'London, UK', 'Dubai, UAE', 'Mumbai, India', 'Berlin, Germany', 'Sydney, Australia']    const communityImages = [
       'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=200&h=200',
       'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=200&h=200',
       'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&q=80&w=200&h=200',
       'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=200&h=200',
-      'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=200&h=200'
+      'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=200&h=200',
+      'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=200&h=200',
+      'https://images.unsplash.com/photo-1558403194-611308249627?auto=format&fit=crop&q=80&w=200&h=200'
     ];
     
     for (let i = 1; i <= 50; i++) {
       const niche = niches[i % niches.length];
+      const imageUrl = communityImages[i % communityImages.length];
       dynamic.push({
         id: `100${Date.now() + i}`,
         name: `${term} ${niche} ${i}`,
@@ -286,19 +288,17 @@ const Home = () => {
         activity: 'High',
         type: 'Public',
         autoApproval: Math.random() > 0.4,
-        postFrequency: `${Math.floor(Math.random() * 50) + 10} posts/day`,
-        image: communityImages[i % communityImages.length],
+        postFrequency: `${Math.floor(Math.random() * 80) + 10} posts/day`,
+        image: imageUrl, // Fixed from hardcoded list
         category: niche.split(' ')[0],
-        location: locations[i % locations.length],
-        description: `The most active ${term} group for professionals to share insights and network.`,
-        rules: "1. No Spam. 2. Respect others. 3. No unauthorized links.",
-        avgEngagement: {
-          likes: Math.floor(Math.random() * 200) + 50,
-          comments: Math.floor(Math.random() * 50) + 10
-        },
-        url: `https://facebook.com/groups/${Math.floor(Math.random() * 1000000000)}`
+        location: 'Global',
+        description: `Official ${term} group for networking and professional growth. High activity community.`,
+        rules: "1. Respect privacy. 2. No spam. 3. Be professional.",
+        avgEngagement: { likes: 150, comments: 45 },
+        url: `https://www.facebook.com/search/groups/?q=${encodeURIComponent(term)}`
       });
     }
+}
     return dynamic;
   };
 

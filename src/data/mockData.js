@@ -1,17 +1,109 @@
 export const mockGroups = [
-  { id: 1, name: 'Crypto Alpha Signals', members: '124K', activity: 'High', type: 'Public', autoApproval: true, postFrequency: '45 posts/day' },
-  { id: 2, name: 'Digital Marketing Mastery', members: '89K', activity: 'Medium', type: 'Public', autoApproval: true, postFrequency: '12 posts/day' },
-  { id: 3, name: 'React JS Developers Hub', members: '256K', activity: 'Very High', type: 'Public', autoApproval: false, postFrequency: '80 posts/day' },
-  { id: 4, name: 'Affiliate Marketing Secrets', members: '56K', activity: 'High', type: 'Public', autoApproval: true, postFrequency: '25 posts/day' },
-  { id: 5, name: 'Freelance Graphics Design', members: '112K', activity: 'Medium', type: 'Public', autoApproval: true, postFrequency: '15 posts/day' },
-  { id: 6, name: 'Python Automation Experts', members: '78K', activity: 'High', type: 'Public', autoApproval: false, postFrequency: '30 posts/day' },
-  { id: 7, name: 'Stock Market Daily', members: '150K', activity: 'Very High', type: 'Public', autoApproval: true, postFrequency: '60 posts/day' },
-  { id: 8, name: 'UI/UX Inspiration Daily', members: '45K', activity: 'Low', type: 'Public', autoApproval: true, postFrequency: '5 posts/day' },
-  { id: 9, name: 'Next.js Enthusiasts', members: '32K', activity: 'Medium', type: 'Public', autoApproval: false, postFrequency: '10 posts/day' },
-  { id: 10, name: 'Forex Trading Community', members: '210K', activity: 'High', type: 'Public', autoApproval: true, postFrequency: '50 posts/day' },
-  { id: 11, name: 'Paid VPN & Proxy Deals', members: '15K', activity: 'Medium', type: 'Public', autoApproval: true, postFrequency: '8 posts/day' },
-  { id: 12, name: 'Premium VPN Discounts', members: '42K', activity: 'High', type: 'Public', autoApproval: true, postFrequency: '22 posts/day' },
-  { id: 13, name: 'VPN Security & Privacy', members: '98K', activity: 'Very High', type: 'Public', autoApproval: false, postFrequency: '35 posts/day' },
-  { id: 14, name: 'E-commerce Dropshipping 2024', members: '340K', activity: 'High', type: 'Public', autoApproval: true, postFrequency: '100 posts/day' },
-  { id: 15, name: 'Shopify Growth Hackers', members: '67K', activity: 'Medium', type: 'Public', autoApproval: true, postFrequency: '18 posts/day' },
+  // --- Marketing & Business ---
+  { 
+    id: 'fb_1', 
+    name: 'Digital Marketing Hub', 
+    members: '450K', 
+    activity: 'Very High', 
+    type: 'Public', 
+    autoApproval: true, 
+    postFrequency: '120 posts/day', 
+    location: 'Global', 
+    category: 'Marketing', 
+    image: 'https://images.unsplash.com/photo-1557838923-2985c318be48?auto=format&fit=crop&q=80&w=200&h=200',
+    description: 'The world\'s largest community for digital marketers to share strategies and growth hacks.',
+    rules: '1. No spamming links. 2. Value-first posts only. 3. Be professional.'
+  },
+  { 
+    id: 'fb_2', 
+    name: 'Facebook Ads Masters', 
+    members: '120K', 
+    activity: 'High', 
+    type: 'Public', 
+    autoApproval: true, 
+    postFrequency: '45 posts/day', 
+    location: 'USA', 
+    category: 'Advertising', 
+    image: 'https://images.unsplash.com/photo-1432888622747-4eb9a8f2c20e?auto=format&fit=crop&q=80&w=200&h=200',
+    description: 'Expert-level discussion on FB ads, scaling, and attribution.',
+    rules: '1. No basic questions. 2. Share case studies. 3. Respect privacy.'
+  },
+  { 
+    id: 'fb_3', 
+    name: 'Shopify & Dropshipping Elite', 
+    members: '89K', 
+    activity: 'High', 
+    type: 'Public', 
+    autoApproval: false, 
+    postFrequency: '30 posts/day', 
+    location: 'Canada', 
+    category: 'E-commerce', 
+    image: 'https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&q=80&w=200&h=200'
+  },
+  
+  // --- Tech & Development ---
+  { 
+    id: 'fb_5', 
+    name: 'Python Developers Worldwide', 
+    members: '650K', 
+    activity: 'Explosive', 
+    type: 'Public', 
+    autoApproval: true, 
+    postFrequency: '200 posts/day', 
+    location: 'Global', 
+    category: 'Tech', 
+    image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&q=80&w=200&h=200'
+  },
+  { 
+    id: 'fb_6', 
+    name: 'ReactJS Community', 
+    members: '340K', 
+    activity: 'Very High', 
+    type: 'Public', 
+    autoApproval: true, 
+    postFrequency: '95 posts/day', 
+    location: 'Global', 
+    category: 'Tech', 
+    image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=200&h=200'
+  },
+
+  // --- Crypto & Trading ---
+  { 
+    id: 'fb_8', 
+    name: 'Bitcoin & Crypto Alerts', 
+    members: '890K', 
+    activity: 'Explosive', 
+    type: 'Public', 
+    autoApproval: true, 
+    postFrequency: '500 posts/day', 
+    location: 'Global', 
+    category: 'Crypto', 
+    image: 'https://images.unsplash.com/photo-1518546305927-5a555bb7020d?auto=format&fit=crop&q=80&w=200&h=200'
+  },
+
+  // --- VPN & Tools ---
+  { 
+    id: 'fb_11', 
+    name: 'Paid VPN & Accounts Free', 
+    members: '12K', 
+    activity: 'High', 
+    type: 'Public', 
+    autoApproval: true, 
+    postFrequency: '15 posts/day', 
+    location: 'Bangladesh', 
+    category: 'Tools', 
+    image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=200&h=200'
+  },
+  { 
+    id: 'fb_12', 
+    name: 'Premium Account Sharing', 
+    members: '45K', 
+    activity: 'Very High', 
+    type: 'Public', 
+    autoApproval: true, 
+    postFrequency: '50 posts/day', 
+    location: 'India', 
+    category: 'Tools', 
+    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=200&h=200'
+  }
 ];
