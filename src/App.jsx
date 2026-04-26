@@ -126,27 +126,40 @@ const GroupDetailsModal = ({ group, onClose }) => (
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', marginBottom: '30px' }}>
-        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '20px', borderRadius: '15px', border: '1px solid var(--border-color)' }}>
-          <p style={{ color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase', marginBottom: '5px' }}>Auto-Approval</p>
-          <p style={{ fontSize: '18px', fontWeight: '800', color: group.autoApproval ? '#22c55e' : '#ef4444' }}>{group.autoApproval ? 'ENABLED' : 'DISABLED'}</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px', marginBottom: '30px' }}>
+        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '15px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '10px', textTransform: 'uppercase', marginBottom: '5px' }}>Auto-Approve</p>
+          <p style={{ fontSize: '14px', fontWeight: '800', color: group.autoApproval ? '#22c55e' : '#ef4444' }}>{group.autoApproval ? 'ON' : 'OFF'}</p>
         </div>
-        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '20px', borderRadius: '15px', border: '1px solid var(--border-color)' }}>
-          <p style={{ color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase', marginBottom: '5px' }}>Members</p>
-          <p style={{ fontSize: '18px', fontWeight: '800' }}>{group.members}</p>
+        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '15px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '10px', textTransform: 'uppercase', marginBottom: '5px' }}>Avg Likes</p>
+          <p style={{ fontSize: '14px', fontWeight: '800', color: 'var(--accent-primary)' }}>{group.avgEngagement?.likes || '120'}+</p>
         </div>
-        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '20px', borderRadius: '15px', border: '1px solid var(--border-color)' }}>
-          <p style={{ color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase', marginBottom: '5px' }}>Growth Rate</p>
-          <p style={{ fontSize: '18px', fontWeight: '800', color: 'var(--accent-primary)' }}>+12% /wk</p>
+        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '15px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '10px', textTransform: 'uppercase', marginBottom: '5px' }}>Location</p>
+          <p style={{ fontSize: '11px', fontWeight: '700' }}>{group.location || 'Global'}</p>
+        </div>
+        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '15px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '10px', textTransform: 'uppercase', marginBottom: '5px' }}>Frequency</p>
+          <p style={{ fontSize: '11px', fontWeight: '700' }}>{group.postFrequency}</p>
         </div>
       </div>
 
+      <div style={{ background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '12px', marginBottom: '25px' }}>
+        <h4 style={{ fontSize: '14px', marginBottom: '10px', color: 'var(--accent-primary)' }}>Group Description & Rules</h4>
+        <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '10px' }}>{group.description}</p>
+        <p style={{ fontSize: '12px', color: 'var(--accent-primary)', fontFamily: 'monospace' }}>Rules: {group.rules}</p>
+      </div>
+
       <div style={{ display: 'flex', gap: '15px' }}>
-        <button className="glow-btn" style={{ flex: 2, padding: '15px' }} onClick={() => window.open(`https://www.facebook.com/search/groups/?q=${encodeURIComponent(group.name)}`, '_blank')}>
-          JOIN NOW ON FACEBOOK
+        <button className="glow-btn" style={{ flex: 2, padding: '15px' }} onClick={() => window.open(group.url || `https://www.facebook.com/search/groups/?q=${encodeURIComponent(group.name)}`, '_blank')}>
+          JOIN GROUP ON FACEBOOK
         </button>
-        <button style={{ flex: 1, padding: '15px', borderRadius: '12px', background: 'var(--bg-hover)', border: '1px solid var(--border-color)', color: 'white', fontWeight: '700', cursor: 'pointer' }} onClick={onClose}>
-          CLOSE
+        <button 
+          onClick={() => { navigator.clipboard.writeText(group.url || ''); alert('URL Copied!'); }}
+          style={{ flex: 1, padding: '15px', borderRadius: '12px', background: 'var(--bg-hover)', border: '1px solid var(--border-color)', color: 'white', fontWeight: '700', cursor: 'pointer' }}
+        >
+          COPY URL
         </button>
       </div>
     </motion.div>
@@ -255,6 +268,7 @@ const Home = () => {
   const generateDynamicResults = (term) => {
     const dynamic = [];
     const niches = ['Marketing Hub', 'Freelance Community', 'Hiring Group', 'Buy & Sell', 'Tech Support', 'Crypto Alerts', 'Affiliate Network'];
+    const locations = ['New York, USA', 'London, UK', 'Dubai, UAE', 'Mumbai, India', 'Berlin, Germany', 'Sydney, Australia'];
     const communityImages = [
       'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=200&h=200',
       'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=200&h=200',
@@ -264,15 +278,25 @@ const Home = () => {
     ];
     
     for (let i = 1; i <= 50; i++) {
+      const niche = niches[i % niches.length];
       dynamic.push({
-        id: Date.now() + i,
-        name: `${term} ${niches[i % niches.length]} ${i}`,
+        id: `100${Date.now() + i}`,
+        name: `${term} ${niche} ${i}`,
         members: `${(Math.random() * 500).toFixed(1)}K`,
         activity: 'High',
         type: 'Public',
         autoApproval: Math.random() > 0.4,
         postFrequency: `${Math.floor(Math.random() * 50) + 10} posts/day`,
-        image: communityImages[i % communityImages.length]
+        image: communityImages[i % communityImages.length],
+        category: niche.split(' ')[0],
+        location: locations[i % locations.length],
+        description: `The most active ${term} group for professionals to share insights and network.`,
+        rules: "1. No Spam. 2. Respect others. 3. No unauthorized links.",
+        avgEngagement: {
+          likes: Math.floor(Math.random() * 200) + 50,
+          comments: Math.floor(Math.random() * 50) + 10
+        },
+        url: `https://facebook.com/groups/${Math.floor(Math.random() * 1000000000)}`
       });
     }
     return dynamic;
