@@ -38,11 +38,20 @@ import Analytics from './pages/Analytics';
 // --- Shared State Manager ---
 const useStore = (key, initialValue) => {
   const [value, setValue] = useState(() => {
-    const saved = localStorage.getItem(key);
-    return saved ? JSON.parse(saved) : initialValue;
+    try {
+      const saved = localStorage.getItem(key);
+      return saved ? JSON.parse(saved) : initialValue;
+    } catch (e) {
+      console.error("Storage error:", e);
+      return initialValue;
+    }
   });
   useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(value));
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch (e) {
+      console.error("Save error:", e);
+    }
   }, [key, value]);
   return [value, setValue];
 };
@@ -222,8 +231,8 @@ const App = () => {
           </div>
         </main>
       </div>
-    </nav>
-  </Router>
-);
+    </Router>
+  );
+};
 
 export default App;
