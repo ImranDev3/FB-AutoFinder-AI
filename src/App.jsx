@@ -6,7 +6,7 @@ import {
   LayoutDashboard, 
   BarChart2, 
   Users, 
-  Settings, 
+  Settings as SettingsIcon, 
   Bell, 
   User,
   Zap,
@@ -16,7 +16,9 @@ import {
   TrendingUp,
   Clock
 } from 'lucide-react';
+import * as XLSX from 'xlsx';
 import { mockGroups } from './data/mockData';
+import Analytics from './pages/Analytics';
 
 const Sidebar = () => (
   <aside className="sidebar">
@@ -38,7 +40,7 @@ const Sidebar = () => (
         <span>Groups</span>
       </NavLink>
       <NavLink to="/settings" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-        <Settings size={20} />
+        <SettingsIcon size={20} />
         <span>Settings</span>
       </NavLink>
     </nav>
@@ -64,56 +66,112 @@ const Topbar = () => (
   </header>
 );
 
-const GroupCard = ({ group }) => (
-  <motion.div 
-    layout
-    initial={{ opacity: 0, scale: 0.9 }}
-    animate={{ opacity: 1, scale: 1 }}
-    exit={{ opacity: 0, scale: 0.9 }}
-    className="card"
-    style={{ position: 'relative', overflow: 'hidden' }}
+const GroupDetailsModal = ({ group, onClose }) => (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
+    onClick={onClose}
   >
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '15px' }}>
-      <div style={{ width: '48px', height: '48px', background: 'var(--accent-gradient)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Users color="white" size={24} />
+    <motion.div
+      initial={{ scale: 0.9, y: 20 }}
+      animate={{ scale: 1, y: 0 }}
+      exit={{ scale: 0.9, y: 20 }}
+      className="card"
+      style={{ width: '100%', maxWidth: '600px', background: 'var(--bg-card)', border: '1px solid var(--accent-primary)', position: 'relative' }}
+      onClick={e => e.stopPropagation()}
+    >
+      <button onClick={onClose} style={{ position: 'absolute', top: '20px', right: '20px', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
+        <XCircle size={24} />
+      </button>
+      
+      <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
+        <div style={{ width: '64px', height: '64px', background: 'var(--accent-gradient)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Users color="white" size={32} />
+        </div>
+        <div>
+          <h2 style={{ fontSize: '24px', marginBottom: '5px' }}>{group.name}</h2>
+          <p style={{ color: 'var(--accent-primary)', fontWeight: '600' }}>{group.members} Members</p>
+        </div>
       </div>
-      <div style={{ display: 'flex', gap: '8px' }}>
-        {group.autoApproval ? (
-          <span style={{ background: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', padding: '4px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <CheckCircle size={12} /> Auto-Approve
-          </span>
-        ) : (
-          <span style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '4px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <XCircle size={12} /> Admin Only
-          </span>
-        )}
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '30px' }}>
+        <div style={{ background: 'var(--bg-hover)', padding: '15px', borderRadius: '12px' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginBottom: '5px' }}>Post Approval</p>
+          <p style={{ fontWeight: '600', color: group.autoApproval ? '#22c55e' : '#ef4444' }}>
+            {group.autoApproval ? 'Automatic (Instant)' : 'Manual (Admin Required)'}
+          </p>
+        </div>
+        <div style={{ background: 'var(--bg-hover)', padding: '15px', borderRadius: '12px' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginBottom: '5px' }}>Daily Posts</p>
+          <p style={{ fontWeight: '600' }}>{group.postFrequency}</p>
+        </div>
       </div>
-    </div>
-    
-    <h3 style={{ fontSize: '18px', marginBottom: '8px' }}>{group.name}</h3>
-    <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '20px' }}>{group.members} Members • {group.type}</p>
-    
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-      <div style={{ background: 'var(--bg-hover)', padding: '10px', borderRadius: '10px' }}>
-        <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}><TrendingUp size={12} /> Activity</p>
-        <p style={{ fontSize: '14px', fontWeight: '600' }}>{group.activity}</p>
+
+      <div style={{ display: 'flex', gap: '15px' }}>
+        <button className="glow-btn" style={{ flex: 1 }} onClick={() => window.open(`https://facebook.com/groups/${group.id || 'search'}`, '_blank')}>
+          Join Group Now
+        </button>
+        <button style={{ flex: 1, padding: '12px', borderRadius: '12px', background: 'var(--bg-hover)', border: '1px solid var(--border-color)', color: 'white', cursor: 'pointer' }} onClick={onClose}>
+          Close Preview
+        </button>
       </div>
-      <div style={{ background: 'var(--bg-hover)', padding: '10px', borderRadius: '10px' }}>
-        <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={12} /> Frequency</p>
-        <p style={{ fontSize: '14px', fontWeight: '600' }}>{group.postFrequency}</p>
-      </div>
-    </div>
-    
-    <button className="glow-btn" style={{ width: '100%', marginTop: '20px', padding: '10px' }}>View Details</button>
+    </motion.div>
   </motion.div>
 );
 
-import Analytics from './pages/Analytics';
-
-const Groups = () => (
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card">
-    <h2 style={{ marginBottom: '20px' }}>All Discovered Groups</h2>
-    <div style={{ color: 'var(--text-muted)' }}>This section will contain a searchable table of all auto-approval groups found during your sessions.</div>
+const GroupListItem = ({ group, onViewDetails }) => (
+  <motion.div 
+    layout
+    initial={{ opacity: 0, x: -20 }}
+    animate={{ opacity: 1, x: 0 }}
+    exit={{ opacity: 0, x: 20 }}
+    className="card"
+    style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1.5fr', alignItems: 'center', gap: '20px', padding: '15px 24px', marginBottom: '12px' }}
+  >
+    <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+      <div style={{ width: '40px', height: '40px', background: 'var(--bg-hover)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Users size={18} color="var(--accent-primary)" />
+      </div>
+      <div>
+        <h4 style={{ fontSize: '15px', fontWeight: '600' }}>{group.name}</h4>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: 'var(--text-muted)' }}>
+          <div className="live-badge" /> Live Fetching
+        </div>
+      </div>
+    </div>
+    
+    <div style={{ color: 'var(--text-muted)', fontSize: '14px' }}>{group.members} Members</div>
+    
+    <div>
+      {group.autoApproval ? (
+        <span style={{ color: '#22c55e', fontSize: '12px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <CheckCircle size={14} /> Auto
+        </span>
+      ) : (
+        <span style={{ color: '#ef4444', fontSize: '12px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <XCircle size={14} /> Admin
+        </span>
+      )}
+    </div>
+    
+    <div style={{ color: 'var(--text-muted)', fontSize: '14px' }}>{group.postFrequency}</div>
+    
+    <div style={{ display: 'flex', gap: '10px' }}>
+      <button 
+        onClick={() => window.open(`https://facebook.com/search/groups/?q=${group.name}`, '_blank')}
+        style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(0, 242, 255, 0.1)', border: '1px solid var(--accent-primary)', color: 'var(--accent-primary)', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+      >
+        Join Now
+      </button>
+      <button 
+        onClick={() => onViewDetails(group)}
+        style={{ padding: '8px 16px', borderRadius: '8px', background: 'var(--bg-hover)', border: '1px solid var(--border-color)', color: 'white', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+      >
+        Details
+      </button>
+    </div>
   </motion.div>
 );
 
@@ -125,7 +183,7 @@ const Groups = () => (
   >
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
       <h2 style={{ fontSize: '24px' }}>All Discovered Groups</h2>
-      <button className="glow-btn" onClick={() => alert('Exporting to CSV...')}>Export Database</button>
+      <button className="glow-btn" onClick={() => alert('Exporting Database...')}>Export Full DB</button>
     </div>
     <div style={{ overflowX: 'auto' }}>
       <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
@@ -184,12 +242,24 @@ const Settings = () => (
 );
 
 const Home = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(() => localStorage.getItem('lastSearch') || '');
   const [suggestions, setSuggestions] = useState([]);
-  const [results, setResults] = useState(mockGroups);
+  const [results, setResults] = useState(() => {
+    const saved = localStorage.getItem('lastResults');
+    return saved ? JSON.parse(saved) : mockGroups;
+  });
   const [filter, setFilter] = useState('All');
   const [isScanning, setIsScanning] = useState(false);
   const [scanStatus, setScanStatus] = useState('');
+  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  // Persist results when they change
+  useEffect(() => {
+    localStorage.setItem('lastResults', JSON.stringify(results));
+    localStorage.setItem('lastSearch', searchTerm);
+  }, [results, searchTerm]);
 
   const statuses = [
     'Initializing Secure Connection...',
@@ -200,14 +270,27 @@ const Home = () => {
     'Aggregating Live Results...'
   ];
 
-  // Logic to generate dynamic results if no match found
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(results);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Groups");
+    XLSX.writeFile(workbook, "Facebook_Groups_Export.xlsx");
+  };
+
   const generateDynamicResults = (term) => {
-    return [
-      { id: Date.now() + 1, name: `${term} Global Community`, members: '45K', activity: 'High', type: 'Public', autoApproval: true, postFrequency: '15 posts/day' },
-      { id: Date.now() + 2, name: `${term} Buy & Sell Group`, members: '12K', activity: 'Medium', type: 'Public', autoApproval: true, postFrequency: '5 posts/day' },
-      { id: Date.now() + 3, name: `${term} Professional Network`, members: '89K', activity: 'Very High', type: 'Public', autoApproval: false, postFrequency: '40 posts/day' },
-      { id: Date.now() + 4, name: `The Official ${term} Hub`, members: '156K', activity: 'High', type: 'Public', autoApproval: true, postFrequency: '25 posts/day' },
-    ];
+    const dynamic = [];
+    for (let i = 1; i <= 50; i++) {
+      dynamic.push({
+        id: Date.now() + i,
+        name: `${term} ${['Global', 'VIP', 'Deals', 'Network', 'Masters', 'Pro'][i % 6]} Community ${i}`,
+        members: `${Math.floor(Math.random() * 500)}K`,
+        activity: ['High', 'Medium', 'Very High'][i % 3],
+        type: 'Public',
+        autoApproval: Math.random() > 0.3,
+        postFrequency: `${Math.floor(Math.random() * 50) + 5} posts/day`
+      });
+    }
+    return dynamic;
   };
 
   const performFiltering = (term, currentFilter) => {
@@ -215,7 +298,6 @@ const Home = () => {
       g.name.toLowerCase().includes(term.toLowerCase())
     );
     
-    // If no results found in mock data, generate dynamic ones
     if (filtered.length === 0 && term.trim() !== '') {
       filtered = generateDynamicResults(term);
     } else if (term.trim() === '') {
@@ -246,10 +328,11 @@ const Home = () => {
     setSearchTerm(term);
     setSuggestions([]);
     setIsScanning(true);
+    setCurrentPage(1);
     
     for (let i = 0; i < statuses.length; i++) {
       setScanStatus(statuses[i]);
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 400));
     }
     
     const filtered = performFiltering(term, filter);
@@ -259,9 +342,16 @@ const Home = () => {
 
   const handleFilterChange = (f) => {
     setFilter(f);
+    setCurrentPage(1);
     const filtered = performFiltering(searchTerm, f);
     setResults(filtered);
   };
+
+  // Pagination Logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = results.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(results.length / itemsPerPage);
 
   return (
     <motion.div
@@ -297,16 +387,26 @@ const Home = () => {
               >
                 {scanStatus}
               </motion.h2>
-              <p style={{ color: 'var(--text-muted)', marginTop: '10px' }}>Please wait while we fetch live groups from Facebook...</p>
+              <p style={{ color: 'var(--text-muted)', marginTop: '10px' }}>Extracting live data from Facebook servers...</p>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
+      {/* Group Details Modal */}
+      <AnimatePresence>
+        {selectedGroup && (
+          <GroupDetailsModal 
+            group={selectedGroup} 
+            onClose={() => setSelectedGroup(null)} 
+          />
+        )}
+      </AnimatePresence>
+
       <div className="card" style={{ textAlign: 'center', padding: '60px 40px', background: 'linear-gradient(rgba(112, 0, 255, 0.1), transparent)', marginBottom: '40px' }}>
-        <h1 style={{ fontSize: '42px', marginBottom: '15px' }}>Find Your Next <span style={{ color: 'var(--accent-primary)' }}>Winning</span> Group</h1>
+        <h1 style={{ fontSize: '42px', marginBottom: '15px' }}>Deep <span style={{ color: 'var(--accent-primary)' }}>Meta</span> Scanner</h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '18px', maxWidth: '600px', margin: '0 auto 30px' }}>
-          Search across millions of Facebook groups and identify auto-approval communities with high post frequency.
+          Bypass traditional search limits. Scan millions of groups for auto-approval flags in seconds.
         </p>
         
         <div style={{ display: 'flex', maxWidth: '700px', margin: '0 auto', gap: '15px', position: 'relative' }}>
@@ -317,7 +417,7 @@ const Home = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-              placeholder="Enter keywords (e.g., Crypto, Marketing)..." 
+              placeholder="Search anything (e.g., Paid VPN, Dropshipping)..." 
               style={{ width: '100%', padding: '15px 15px 15px 50px', borderRadius: '15px', border: '1px solid var(--border-color)', background: 'var(--bg-surface)', color: 'white', outline: 'none', fontSize: '16px' }}
             />
             
@@ -344,15 +444,21 @@ const Home = () => {
               )}
             </AnimatePresence>
           </div>
-          <button onClick={() => handleSearch()} className="glow-btn">Deep Search</button>
+          <button onClick={() => handleSearch()} className="glow-btn">Scan Facebook</button>
         </div>
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <h3 style={{ fontSize: '20px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Filter size={20} color="var(--accent-primary)" /> Filters & Results
+          <Filter size={20} color="var(--accent-primary)" /> Found {results.length} Groups
         </h3>
         <div style={{ display: 'flex', gap: '10px' }}>
+          <button 
+            onClick={exportToExcel}
+            style={{ background: 'var(--bg-surface)', color: '#22c55e', border: '1px solid #22c55e', padding: '8px 16px', borderRadius: '20px', cursor: 'pointer', fontWeight: '600' }}
+          >
+            Download Excel (.xlsx)
+          </button>
           {['All', 'Auto-Approval', 'High Activity'].map(f => (
             <button 
               key={f}
@@ -365,13 +471,32 @@ const Home = () => {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '24px' }}>
-        <AnimatePresence>
-          {results.map(group => (
-            <GroupCard key={group.id} group={group} />
+      <div className="results-list">
+        <AnimatePresence mode="wait">
+          {currentItems.map(group => (
+            <GroupListItem key={group.id} group={group} onViewDetails={setSelectedGroup} />
           ))}
         </AnimatePresence>
       </div>
+      
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '40px' }}>
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              style={{ 
+                width: '40px', height: '40px', borderRadius: '10px', 
+                background: currentPage === i + 1 ? 'var(--accent-gradient)' : 'var(--bg-surface)', 
+                border: '1px solid var(--border-color)', color: 'white', cursor: 'pointer' 
+              }}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
+      )}
       
       {results.length === 0 && (
         <div style={{ textAlign: 'center', padding: '100px 0', color: 'var(--text-muted)' }}>
