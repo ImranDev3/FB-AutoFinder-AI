@@ -3,95 +3,119 @@
 
 ![Banner](./fb_autofinder_banner_1777180311175.png)
 
+---
+
+## 📖 Table of Contents
+1. [Overview](#-overview)
+2. [Key Features](#-key-features)
+3. [Deep Scraper Architecture](#-deep-scraper-architecture)
+4. [Tech Stack](#-tech-stack)
+5. [Installation & Setup](#-getting-started)
+6. [Usage Guide](#-usage-guide)
+7. [API & Security](#-security--compliance)
+8. [Roadmap](#-future-roadmap)
+9. [Contributing](#-contributing)
+10. [License](#-license)
+
+---
+
 ## 🌟 Overview
-**MetaVision FB-AutoFinder PRO** is a professional-grade, high-performance data extraction and intelligence tool designed for digital marketers, researchers, and community managers. Built with a sleek **Neon-Glassmorphism UI**, it provides real-time insights into the Facebook group ecosystem, identifying high-growth communities with low moderation barriers.
+**MetaVision FB-AutoFinder PRO** is a premium data intelligence platform designed to bridge the gap between niche discovery and high-conversion marketing. By leveraging advanced simulation logic and Meta-CDN node handshakes, this tool allows users to identify groups that are not only relevant but also highly accessible (Auto-Approval).
 
 ---
 
 ## ✨ Key Features
 
-### 🔍 Deep Intelligence Engine
-- **Niche Discovery:** Search by keywords (VPN, Crypto, Marketing, etc.) to find hidden gems.
-- **Auto-Approval Detection:** Advanced parsing logic to identify groups with `Auto-Approval` enabled.
-- **Live Terminal Logging:** Real-time feedback during the scraping process showing proxy rotations and node handshakes.
+### 🔍 Discovery Engine
+- **Multi-Niche Scan:** Scrape for keywords like VPN, Crypto, Marketing, E-commerce, and more.
+- **Auto-Approval Insights:** Instantly identify groups with low moderation barriers.
+- **Global Reach:** Scrape data nodes across US, Europe, and Asia.
 
-### 📊 Advanced Data Analytics
-- **Member Distribution:** Visual charts showing the size of discovered communities.
-- **Engagement Heatmaps:** Analysis of post frequency and group activity levels.
-- **Growth Projections:** Built-in logic to estimate group growth and potential.
+### 📊 Advanced Analytics Dashboard
+- **Visual Data Mapping:** Pure SVG charts for member distribution and engagement.
+- **Market Trends:** Projected activity levels based on live node parsing.
+- **Enterprise Reporting:** Export full datasets in **Professional Excel** and **JSON** formats.
 
-### 💼 Commercial SaaS Ready
-- **Subscription Plans:** Pre-built Tiered Pricing (Starter, Pro, Enterprise).
-- **Scan History:** Persistent logs of all discovery operations.
-- **Multi-Format Export:** One-click download as **Excel (.xlsx)** or **JSON**.
-- **API Management:** Integrated settings for Proxy rotation and Meta API keys.
+### 💼 Commercial SaaS Suite
+- **Scan History:** Persistent activity logs for all intelligence operations.
+- **Tiered Billing:** Pre-configured pricing models for Starter, Pro, and Enterprise users.
+- **API Settings:** Fully functional proxy and API key management panel.
+
+---
+
+## 🏗 Deep Scraper Architecture
+MetaVision uses a multi-layered approach to simulate high-frequency data extraction:
+
+1. **Authentication Layer:** Simulates secure handshakes with Meta's Edge CDN.
+2. **Parsing Layer:** Utilizes a custom DOM-parsing simulation to extract group IDs, member counts, and privacy settings.
+3. **Intelligence Layer:** Analyzes extracted data to categorize groups by activity (High, Medium, Explosive).
+4. **Persistence Layer:** Uses `localStorage` to ensure zero data loss between sessions.
 
 ---
 
 ## 🛠 Tech Stack
-- **Frontend:** React 19 + Vite 8
-- **Animations:** Framer Motion
-- **Icons:** Lucide-React
-- **Charts:** Pure SVG Data Visualization (Stable & Light)
-- **Styling:** Vanilla CSS (Enterprise Dark Theme)
-- **Data:** SheetJS (XLSX)
+- **Frontend:** [React 19](https://react.dev/) + [Vite 8](https://vitejs.dev/)
+- **Animations:** [Framer Motion](https://www.framer.com/motion/)
+- **Data Visualization:** Pure React SVG Engine (High Stability)
+- **Icons:** [Lucide-React](https://lucide.dev/)
+- **Exports:** [XLSX (SheetJS)](https://sheetjs.com/)
+- **Persistence:** Web Storage API
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js (v18 or higher)
+- Node.js (v18+)
 - npm or yarn
 
 ### Installation
-1. **Clone the repository:**
+1. **Clone the Repo:**
    ```bash
    git clone https://github.com/ImranDev3/FB-AutoFinder-AI.git
    ```
-2. **Navigate to the project directory:**
-   ```bash
-   cd FB-AutoFinder-AI
-   ```
-3. **Install dependencies:**
+2. **Install Deps:**
    ```bash
    npm install
    ```
-4. **Run the development server:**
+3. **Launch Engine:**
    ```bash
    npm run dev
    ```
 
 ---
 
-## 📸 Screenshots
-
-| Dashboard | Analytics | History |
-| :---: | :---: | :---: |
-| ![Dashboard](./dashboard_preview.png) | ![Analytics](./analytics_preview.png) | ![History](./history_preview.png) |
+## 📖 Usage Guide
+1. **Scan:** Enter a keyword in the Intelligence Command Center.
+2. **Analyze:** Click "Analyze" on any result to view deep-dive group DNA.
+3. **Join:** Use the "Join Group" button to open the original Facebook group search result.
+4. **Export:** Download your findings for marketing campaigns using the Excel/JSON buttons.
+5. **Manage:** Use the Settings panel to configure your proxy nodes.
 
 ---
 
 ## 🛡 Security & Compliance
-- **100% Encrypted Node Handshake**
-- **User-Agent Rotation Logic**
-- **Meta Graph API v19.0 Simulation**
-- **Strict Data Privacy Protocols**
+- **User-Agent Randomization:** Simulates different browser environments to ensure scraper longevity.
+- **Encrypted Node Sync:** All "Live Scans" are visually backed by encrypted terminal logs.
+- **Compliance:** MetaVision is intended for research and public data analysis.
 
 ---
 
-## 📈 Subscription Tiers
-| Feature | Starter | Professional | Enterprise |
-| :--- | :---: | :---: | :---: |
-| Monthly Scans | 1,000 | 10,000 | Unlimited |
-| Data Export | Excel | Excel/JSON | All + PDF |
-| Proxy Nodes | Basic | Priority | Dedicated |
-| API Access | ✅ | ✅ | ✅ |
+## 🗺 Future Roadmap
+- [ ] **AI Description Generator:** Automatic marketing copy for discovered groups.
+- [ ] **Direct Messenger Integration:** Contacting group admins via simulated API.
+- [ ] **Global Heatmap:** Interactive map showing group density by region.
+- [ ] **Mobile App:** React Native port for on-the-go intelligence.
 
 ---
 
 ## 🤝 Contributing
-Contributions are welcome! If you'd like to improve the scraping engine or UI, please fork the repo and submit a PR.
+Contributions are the lifeblood of open source. 
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ---
 
@@ -102,8 +126,9 @@ Distributed under the **MIT License**. See `LICENSE` for more information.
 
 ## 👨‍💻 Developed By
 **Imran Dev**  
-*Professional Full-Stack Developer & Data Architect*  
-[GitHub Profile](https://github.com/ImranDev3)
+*Full-Stack Architect & Enterprise Software Developer*  
+[GitHub Profile](https://github.com/ImranDev3)  
+[Contact Me](mailto:imran@dev.com)
 
 ---
-*Disclaimer: This tool is for educational and research purposes only. Always comply with Facebook's Terms of Service.*
+*Powered by MetaVision Engine v5.0.0-PRO*
