@@ -89,7 +89,7 @@ const GroupDetailsModal = ({ group, onClose }) => (
       <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
         <div style={{ width: '80px', height: '80px', borderRadius: '15px', overflow: 'hidden', flexShrink: 0, background: 'var(--bg-hover)' }}>
           <img 
-            src={`https://picsum.photos/seed/${group.name}/160/160`} 
+            src={group.image || `https://picsum.photos/seed/${group.name}/160/160`} 
             alt="Logo" 
             style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
           />
@@ -167,7 +167,7 @@ const GroupListItem = ({ group, onViewDetails }) => (
     {/* Group Cover / Icon */}
     <div style={{ position: 'relative', width: '80px', height: '80px', borderRadius: '12px', overflow: 'hidden', flexShrink: 0, background: 'var(--bg-hover)' }}>
       <img 
-        src={`https://picsum.photos/seed/${group.name}/160/160`} 
+        src={group.image || `https://picsum.photos/seed/${group.name}/160/160`} 
         alt="Cover" 
         style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
       />
@@ -336,10 +336,20 @@ const Home = () => {
     const dynamic = [];
     const prefixes = ['', 'The Best ', 'Official ', 'Live ', 'Global '];
     const niches = ['Marketing Hub', 'Freelance Community', 'Hiring Group', 'Buy & Sell', 'Tech Support', 'Crypto Alerts', 'Affiliate Network'];
+    const communityImages = [
+      'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=200&h=200',
+      'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=200&h=200',
+      'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&q=80&w=200&h=200',
+      'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=200&h=200',
+      'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=200&h=200',
+      'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=200&h=200',
+      'https://images.unsplash.com/photo-1558403194-611308249627?auto=format&fit=crop&q=80&w=200&h=200'
+    ];
     
     for (let i = 1; i <= 50; i++) {
       const prefix = prefixes[i % prefixes.length];
       const niche = niches[i % niches.length];
+      const imageUrl = communityImages[i % communityImages.length];
       dynamic.push({
         id: Date.now() + i,
         name: `${prefix}${term} ${niche} ${i > 10 ? i : ''}`.trim(),
@@ -347,7 +357,8 @@ const Home = () => {
         activity: ['High', 'Medium', 'Very High', 'Explosive'][i % 4],
         type: 'Public',
         autoApproval: Math.random() > 0.4,
-        postFrequency: `${Math.floor(Math.random() * 80) + 10} posts/day`
+        postFrequency: `${Math.floor(Math.random() * 80) + 10} posts/day`,
+        image: imageUrl
       });
     }
     return dynamic;
