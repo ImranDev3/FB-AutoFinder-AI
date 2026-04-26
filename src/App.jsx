@@ -266,18 +266,20 @@ const Home = () => {
     const saved = localStorage.getItem('lastResults');
     return saved ? JSON.parse(saved) : mockGroups;
   });
-  const [filter, setFilter] = useState('All');
+  const [filter, setFilter] = useState(() => localStorage.getItem('lastFilter') || 'All');
   const [isScanning, setIsScanning] = useState(false);
   const [scanStatus, setScanStatus] = useState('');
   const [selectedGroup, setSelectedGroup] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(() => parseInt(localStorage.getItem('lastPage')) || 1);
   const itemsPerPage = 10;
 
-  // Persist results when they change
+  // Persist all state variables for smooth reload
   useEffect(() => {
     localStorage.setItem('lastResults', JSON.stringify(results));
     localStorage.setItem('lastSearch', searchTerm);
-  }, [results, searchTerm]);
+    localStorage.setItem('lastFilter', filter);
+    localStorage.setItem('lastPage', currentPage.toString());
+  }, [results, searchTerm, filter, currentPage]);
 
   const statuses = [
     'Initializing Secure Connection...',
