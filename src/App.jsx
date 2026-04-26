@@ -295,20 +295,73 @@ const Home = () => {
     XLSX.writeFile(workbook, "Facebook_Groups_Export.xlsx");
   };
 
+  const [terminalLogs, setTerminalLogs] = useState([]);
+
+  const statuses = [
+    'Initializing Multi-Threaded Scraper...',
+    'Establishing Secure Proxy Tunnel (US-East)...',
+    'Bypassing Facebook JS Protections...',
+    'Injecting Search Payload into Meta Graph...',
+    'Parsing HTML DOM for Group Metadata...',
+    'Filtering Auto-Approval Permission Nodes...',
+    'Syncing Results with Local Database...'
+  ];
+
   const generateDynamicResults = (term) => {
     const dynamic = [];
+    const niches = ['Community', 'Discussion', 'Official', 'Marketplace', 'Network', 'Support', 'Fans', 'Hustlers'];
+    const suffixes = ['Global', '2024', 'Verified', 'Elite', 'Secret', 'Premium', 'Public'];
+    
     for (let i = 1; i <= 50; i++) {
+      const niche = niches[i % niches.length];
+      const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
       dynamic.push({
         id: Date.now() + i,
-        name: `${term} ${['Global', 'VIP', 'Deals', 'Network', 'Masters', 'Pro'][i % 6]} Community ${i}`,
-        members: `${Math.floor(Math.random() * 500)}K`,
-        activity: ['High', 'Medium', 'Very High'][i % 3],
-        type: 'Public',
-        autoApproval: Math.random() > 0.3,
-        postFrequency: `${Math.floor(Math.random() * 50) + 5} posts/day`
+        name: `${term} ${suffix} ${niche} ${i > 10 ? i : ''}`,
+        members: `${(Math.random() * 450 + 10).toFixed(1)}K`,
+        activity: ['High', 'Medium', 'Very High', 'Explosive'][i % 4],
+        type: Math.random() > 0.2 ? 'Public' : 'Private',
+        autoApproval: Math.random() > 0.35,
+        postFrequency: `${Math.floor(Math.random() * 80) + 10} posts/day`
       });
     }
     return dynamic;
+  };
+
+  const handleSearch = async (term = searchTerm) => {
+    if (!term.trim()) return;
+    setSearchTerm(term);
+    setSuggestions([]);
+    setIsScanning(true);
+    setTerminalLogs([]);
+    setCurrentPage(1);
+    
+    // Detailed terminal simulation
+    const logBatch = [
+      `[INFO] Target Keyword: ${term}`,
+      `[INFO] Starting Scraper v4.2.0-STABLE`,
+      `[DEBUG] Rotating User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)...`,
+      `[NETWORK] GET https://www.facebook.com/search/groups/?q=${encodeURIComponent(term)}`,
+      `[PARSER] Found 120+ raw group nodes. Extracting...`,
+      `[DB] Checking 10.22.41.1 (Meta Edge Node)...`,
+      `[META] Detected Auto-Approval patterns in 34 nodes.`
+    ];
+
+    for (let i = 0; i < statuses.length; i++) {
+      setScanStatus(statuses[i]);
+      if (logBatch[i]) {
+        setTerminalLogs(prev => [...prev, logBatch[i]]);
+      }
+      // Add random sub-logs
+      if (i > 2) {
+        setTerminalLogs(prev => [...prev, `[EXTRACT] Parsing: fb_group_id_${Math.floor(Math.random()*1000000)}... OK`]);
+      }
+      await new Promise(resolve => setTimeout(resolve, 600));
+    }
+    
+    const filtered = performFiltering(term, filter);
+    setResults(filtered);
+    setIsScanning(false);
   };
 
   const performFiltering = (term, currentFilter) => {
@@ -386,26 +439,45 @@ const Home = () => {
             exit={{ opacity: 0 }}
             style={{ 
               position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
-              background: 'rgba(7, 9, 13, 0.9)', backdropFilter: 'blur(10px)', 
+              background: 'rgba(7, 9, 13, 0.95)', backdropFilter: 'blur(15px)', 
               zIndex: 1000, display: 'flex', flexDirection: 'column', 
               alignItems: 'center', justifyContent: 'center', gap: '30px' 
             }}
           >
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              style={{ width: '80px', height: '80px', border: '4px solid var(--border-color)', borderTop: '4px solid var(--accent-primary)', borderRadius: '50%' }}
-            />
-            <div style={{ textAlign: 'center' }}>
+            <div style={{ position: 'relative', width: '120px', height: '120px' }}>
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                style={{ position: 'absolute', inset: 0, border: '4px solid rgba(0, 242, 255, 0.1)', borderTop: '4px solid var(--accent-primary)', borderRadius: '50%' }}
+              />
+              <div style={{ position: 'absolute', inset: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Zap size={40} className="pulse-animation" color="var(--accent-primary)" />
+              </div>
+            </div>
+
+            <div style={{ textAlign: 'center', width: '100%', maxWidth: '800px' }}>
               <motion.h2
                 key={scanStatus}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                style={{ fontSize: '24px', background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: '700' }}
+                style={{ fontSize: '28px', background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: '800', marginBottom: '20px' }}
               >
                 {scanStatus}
               </motion.h2>
-              <p style={{ color: 'var(--text-muted)', marginTop: '10px' }}>Extracting live data from Facebook servers...</p>
+              
+              <div style={{ 
+                background: 'rgba(0,0,0,0.5)', border: '1px solid var(--border-color)', 
+                borderRadius: '12px', padding: '20px', height: '200px', overflowY: 'auto', 
+                textAlign: 'left', fontFamily: 'monospace', fontSize: '13px', color: '#00ff41',
+                boxShadow: 'inset 0 0 20px rgba(0,0,0,0.5)', width: '90%', margin: '0 auto'
+              }}>
+                {terminalLogs.map((log, idx) => (
+                  <motion.div initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} key={idx} style={{ marginBottom: '4px' }}>
+                    <span style={{ color: '#888' }}>[{new Date().toLocaleTimeString()}]</span> {log}
+                  </motion.div>
+                ))}
+                <motion.div animate={{ opacity: [0, 1] }} transition={{ repeat: Infinity, duration: 0.8 }}>_</motion.div>
+              </div>
             </div>
           </motion.div>
         )}
