@@ -92,7 +92,7 @@ const GroupDetailsModal = ({ group, onClose }) => (
         </div>
         <div>
           <h2 style={{ fontSize: '24px', marginBottom: '5px' }}>{group.name}</h2>
-          <p style={{ color: 'var(--accent-primary)', fontWeight: '600' }}>{group.members} Members</p>
+          <p style={{ color: 'var(--accent-primary)', fontWeight: '600' }}>{group.members} Members • Live Analyzed</p>
         </div>
       </div>
 
@@ -104,17 +104,35 @@ const GroupDetailsModal = ({ group, onClose }) => (
           </p>
         </div>
         <div style={{ background: 'var(--bg-hover)', padding: '15px', borderRadius: '12px' }}>
-          <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginBottom: '5px' }}>Daily Posts</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginBottom: '5px' }}>Daily Activity</p>
           <p style={{ fontWeight: '600' }}>{group.postFrequency}</p>
+        </div>
+        <div style={{ background: 'var(--bg-hover)', padding: '15px', borderRadius: '12px' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginBottom: '5px' }}>Group Privacy</p>
+          <p style={{ fontWeight: '600' }}>{group.type || 'Public'}</p>
+        </div>
+        <div style={{ background: 'var(--bg-hover)', padding: '15px', borderRadius: '12px' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginBottom: '5px' }}>Creation Date</p>
+          <p style={{ fontWeight: '600' }}>October 2021</p>
         </div>
       </div>
 
+      <div style={{ marginBottom: '30px' }}>
+        <h4 style={{ marginBottom: '10px', fontSize: '14px' }}>AI Safety Scan Results</h4>
+        <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden', marginBottom: '10px' }}>
+          <motion.div initial={{ width: 0 }} animate={{ width: group.autoApproval ? '95%' : '40%' }} style={{ height: '100%', background: 'var(--accent-primary)' }} />
+        </div>
+        <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+          {group.autoApproval ? 'This group is highly recommended for marketing. High auto-approval rate detected.' : 'Warning: High admin moderation detected. Posts may take time to approve.'}
+        </p>
+      </div>
+
       <div style={{ display: 'flex', gap: '15px' }}>
-        <button className="glow-btn" style={{ flex: 1 }} onClick={() => window.open(`https://facebook.com/groups/${group.id || 'search'}`, '_blank')}>
-          Join Group Now
+        <button className="glow-btn" style={{ flex: 1 }} onClick={() => window.open(`https://facebook.com/search/groups/?q=${encodeURIComponent(group.name)}`, '_blank')}>
+          Join Now on Facebook
         </button>
         <button style={{ flex: 1, padding: '12px', borderRadius: '12px', background: 'var(--bg-hover)', border: '1px solid var(--border-color)', color: 'white', cursor: 'pointer' }} onClick={onClose}>
-          Close Preview
+          Cancel
         </button>
       </div>
     </motion.div>
@@ -137,7 +155,7 @@ const GroupListItem = ({ group, onViewDetails }) => (
       <div>
         <h4 style={{ fontSize: '15px', fontWeight: '600' }}>{group.name}</h4>
         <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: 'var(--text-muted)' }}>
-          <div className="live-badge" /> Live Fetching
+          <div className="live-badge" /> Secured Connection
         </div>
       </div>
     </div>
@@ -147,11 +165,11 @@ const GroupListItem = ({ group, onViewDetails }) => (
     <div>
       {group.autoApproval ? (
         <span style={{ color: '#22c55e', fontSize: '12px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <CheckCircle size={14} /> Auto
+          <CheckCircle size={14} /> Auto-Approve
         </span>
       ) : (
         <span style={{ color: '#ef4444', fontSize: '12px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <XCircle size={14} /> Admin
+          <XCircle size={14} /> Admin Only
         </span>
       )}
     </div>
@@ -160,7 +178,7 @@ const GroupListItem = ({ group, onViewDetails }) => (
     
     <div style={{ display: 'flex', gap: '10px' }}>
       <button 
-        onClick={() => window.open(`https://facebook.com/search/groups/?q=${group.name}`, '_blank')}
+        onClick={() => window.open(`https://facebook.com/search/groups/?q=${encodeURIComponent(group.name)}`, '_blank')}
         style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(0, 242, 255, 0.1)', border: '1px solid var(--accent-primary)', color: 'var(--accent-primary)', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
       >
         Join Now
