@@ -142,59 +142,81 @@ const GroupDetailsModal = ({ group, onClose }) => (
 const GroupListItem = ({ group, onViewDetails }) => (
   <motion.div 
     layout
-    initial={{ opacity: 0, x: -20 }}
-    animate={{ opacity: 1, x: 0 }}
-    exit={{ opacity: 0, x: 20 }}
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, scale: 0.95 }}
     className="card"
-    style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1.5fr', alignItems: 'center', gap: '20px', padding: '15px 24px', marginBottom: '12px' }}
+    style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      gap: '20px', 
+      padding: '12px', 
+      marginBottom: '16px',
+      background: 'var(--bg-surface)',
+      border: '1px solid var(--border-color)',
+      borderRadius: '12px',
+      transition: '0.3s'
+    }}
+    onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--accent-primary)'}
+    onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
   >
-    <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-      <div style={{ width: '40px', height: '40px', background: 'var(--bg-hover)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Users size={18} color="var(--accent-primary)" />
-      </div>
-      <div>
-        <h4 style={{ fontSize: '15px', fontWeight: '600' }}>{group.name}</h4>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: 'var(--text-muted)' }}>
-          <div className="live-badge" /> 100% Secured Link
+    {/* Group Cover / Icon */}
+    <div style={{ position: 'relative', width: '80px', height: '80px', borderRadius: '12px', overflow: 'hidden', flexShrink: 0, background: 'var(--bg-hover)' }}>
+      <img 
+        src={`https://picsum.photos/seed/${group.name}/160/160`} 
+        alt="Cover" 
+        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+      />
+      {group.autoApproval && (
+        <div style={{ position: 'absolute', top: '5px', right: '5px', background: 'var(--accent-primary)', borderRadius: '50%', padding: '4px' }}>
+          <CheckCircle size={10} color="white" />
         </div>
-      </div>
-    </div>
-    
-    <div style={{ color: 'var(--text-muted)', fontSize: '14px' }}>{group.members} Members</div>
-    
-    <div>
-      {group.autoApproval ? (
-        <span style={{ color: '#22c55e', fontSize: '12px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <CheckCircle size={14} /> Auto-Approve
-        </span>
-      ) : (
-        <span style={{ color: '#ef4444', fontSize: '12px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <XCircle size={14} /> Admin Only
-        </span>
       )}
     </div>
+
+    {/* Content */}
+    <div style={{ flex: 1 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+        <h4 style={{ fontSize: '17px', fontWeight: '700', color: 'white' }}>{group.name}</h4>
+        {group.members.includes('K') && parseInt(group.members) > 50 && (
+          <CheckCircle size={16} fill="var(--accent-primary)" color="var(--bg-surface)" title="Verified Community" />
+        )}
+      </div>
+      
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', fontSize: '13px', color: 'var(--text-muted)', marginBottom: '8px' }}>
+        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <Users size={14} /> {group.members} members
+        </span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <Zap size={14} color={group.autoApproval ? '#22c55e' : '#ef4444'} /> {group.autoApproval ? 'Auto-Approval ON' : 'Admin Approval'}
+        </span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <TrendingUp size={14} /> {group.postFrequency}
+        </span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <Clock size={14} /> Active 5m ago
+        </span>
+      </div>
+
+      <div style={{ fontSize: '12px', color: 'var(--accent-primary)', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <div className="live-badge" /> Connected to Meta Graph API v19.0
+      </div>
+    </div>
     
-    <div style={{ color: 'var(--text-muted)', fontSize: '14px' }}>{group.postFrequency}</div>
-    
-    <div style={{ display: 'flex', gap: '10px' }}>
+    {/* Actions */}
+    <div style={{ display: 'flex', gap: '10px', paddingRight: '10px' }}>
       <button 
         onClick={() => window.open(`https://www.facebook.com/search/groups/?q=${encodeURIComponent(group.name)}`, '_blank')}
-        style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(0, 242, 255, 0.1)', border: '1px solid var(--accent-primary)', color: 'var(--accent-primary)', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+        className="glow-btn"
+        style={{ padding: '8px 20px', borderRadius: '8px', fontSize: '13px' }}
       >
-        Join Now
-      </button>
-      <button 
-        onClick={() => { navigator.clipboard.writeText(group.name); alert('Group name copied! You can paste it in Facebook.'); }}
-        style={{ padding: '8px 12px', borderRadius: '8px', background: 'var(--bg-hover)', border: '1px solid var(--border-color)', color: 'white', fontSize: '12px', cursor: 'pointer' }}
-        title="Copy Name"
-      >
-        Copy
+        Join Group
       </button>
       <button 
         onClick={() => onViewDetails(group)}
-        style={{ padding: '8px 16px', borderRadius: '8px', background: 'var(--bg-hover)', border: '1px solid var(--border-color)', color: 'white', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+        style={{ padding: '8px 16px', borderRadius: '8px', background: 'var(--bg-hover)', border: '1px solid var(--border-color)', color: 'white', fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}
       >
-        Details
+        Analyze
       </button>
     </div>
   </motion.div>
