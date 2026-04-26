@@ -87,8 +87,12 @@ const GroupDetailsModal = ({ group, onClose }) => (
       </button>
       
       <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
-        <div style={{ width: '64px', height: '64px', background: 'var(--accent-gradient)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Users color="white" size={32} />
+        <div style={{ width: '80px', height: '80px', borderRadius: '15px', overflow: 'hidden', flexShrink: 0, background: 'var(--bg-hover)' }}>
+          <img 
+            src={`https://picsum.photos/seed/${group.name}/160/160`} 
+            alt="Logo" 
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+          />
         </div>
         <div>
           <h2 style={{ fontSize: '24px', marginBottom: '5px' }}>{group.name}</h2>
