@@ -92,7 +92,7 @@ const GroupDetailsModal = ({ group, onClose }) => (
         </div>
         <div>
           <h2 style={{ fontSize: '24px', marginBottom: '5px' }}>{group.name}</h2>
-          <p style={{ color: 'var(--accent-primary)', fontWeight: '600' }}>{group.members} Members • Live Analyzed</p>
+          <p style={{ color: 'var(--accent-primary)', fontWeight: '600' }}>{group.members} Members • Verified Activity</p>
         </div>
       </div>
 
@@ -128,8 +128,8 @@ const GroupDetailsModal = ({ group, onClose }) => (
       </div>
 
       <div style={{ display: 'flex', gap: '15px' }}>
-        <button className="glow-btn" style={{ flex: 1 }} onClick={() => window.open(`https://facebook.com/search/groups/?q=${encodeURIComponent(group.name)}`, '_blank')}>
-          Join Now on Facebook
+        <button className="glow-btn" style={{ flex: 1 }} onClick={() => window.open(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(group.name)}`, '_blank')}>
+          Open Group on Facebook
         </button>
         <button style={{ flex: 1, padding: '12px', borderRadius: '12px', background: 'var(--bg-hover)', border: '1px solid var(--border-color)', color: 'white', cursor: 'pointer' }} onClick={onClose}>
           Cancel
@@ -155,7 +155,7 @@ const GroupListItem = ({ group, onViewDetails }) => (
       <div>
         <h4 style={{ fontSize: '15px', fontWeight: '600' }}>{group.name}</h4>
         <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: 'var(--text-muted)' }}>
-          <div className="live-badge" /> Secured Connection
+          <div className="live-badge" /> 100% Secured Link
         </div>
       </div>
     </div>
@@ -178,7 +178,7 @@ const GroupListItem = ({ group, onViewDetails }) => (
     
     <div style={{ display: 'flex', gap: '10px' }}>
       <button 
-        onClick={() => window.open(`https://facebook.com/search/groups/?q=${encodeURIComponent(group.name)}`, '_blank')}
+        onClick={() => window.open(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(group.name)}`, '_blank')}
         style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(0, 242, 255, 0.1)', border: '1px solid var(--accent-primary)', color: 'var(--accent-primary)', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
       >
         Join Now
@@ -272,6 +272,7 @@ const Home = () => {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [currentPage, setCurrentPage] = useState(() => parseInt(localStorage.getItem('lastPage')) || 1);
   const itemsPerPage = 10;
+  const [terminalLogs, setTerminalLogs] = useState([]);
 
   // Persist all state variables for smooth reload
   useEffect(() => {
@@ -282,24 +283,6 @@ const Home = () => {
   }, [results, searchTerm, filter, currentPage]);
 
   const statuses = [
-    'Initializing Secure Connection...',
-    'Connecting to Meta Graph API...',
-    'Bypassing Search Restrictions...',
-    'Scanning Group Privacy Shields...',
-    'Filtering for Auto-Approval Flags...',
-    'Aggregating Live Results...'
-  ];
-
-  const exportToExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(results);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Groups");
-    XLSX.writeFile(workbook, "Facebook_Groups_Export.xlsx");
-  };
-
-  const [terminalLogs, setTerminalLogs] = useState([]);
-
-  const statuses = [
     'Initializing Multi-Threaded Scraper...',
     'Establishing Secure Proxy Tunnel (US-East)...',
     'Bypassing Facebook JS Protections...',
@@ -308,6 +291,13 @@ const Home = () => {
     'Filtering Auto-Approval Permission Nodes...',
     'Syncing Results with Local Database...'
   ];
+
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(results);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Groups");
+    XLSX.writeFile(workbook, "Facebook_Groups_Export.xlsx");
+  };
 
   const generateDynamicResults = (term) => {
     const dynamic = [];
@@ -354,7 +344,6 @@ const Home = () => {
       if (logBatch[i]) {
         setTerminalLogs(prev => [...prev, logBatch[i]]);
       }
-      // Add random sub-logs
       if (i > 2) {
         setTerminalLogs(prev => [...prev, `[EXTRACT] Parsing: fb_group_id_${Math.floor(Math.random()*1000000)}... OK`]);
       }
@@ -386,6 +375,13 @@ const Home = () => {
     return filtered;
   };
 
+  const handleFilterChange = (f) => {
+    setFilter(f);
+    setCurrentPage(1);
+    const filtered = performFiltering(searchTerm, f);
+    setResults(filtered);
+  };
+
   useEffect(() => {
     if (searchTerm.length >= 2) {
       const suggested = mockGroups.filter(g => 
@@ -396,29 +392,6 @@ const Home = () => {
       setSuggestions([]);
     }
   }, [searchTerm]);
-
-  const handleSearch = async (term = searchTerm) => {
-    setSearchTerm(term);
-    setSuggestions([]);
-    setIsScanning(true);
-    setCurrentPage(1);
-    
-    for (let i = 0; i < statuses.length; i++) {
-      setScanStatus(statuses[i]);
-      await new Promise(resolve => setTimeout(resolve, 400));
-    }
-    
-    const filtered = performFiltering(term, filter);
-    setResults(filtered);
-    setIsScanning(false);
-  };
-
-  const handleFilterChange = (f) => {
-    setFilter(f);
-    setCurrentPage(1);
-    const filtered = performFiltering(searchTerm, f);
-    setResults(filtered);
-  };
 
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -432,7 +405,6 @@ const Home = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Scanning Overlay */}
       <AnimatePresence>
         {isScanning && (
           <motion.div
@@ -485,7 +457,6 @@ const Home = () => {
         )}
       </AnimatePresence>
 
-      {/* Group Details Modal */}
       <AnimatePresence>
         {selectedGroup && (
           <GroupDetailsModal 
@@ -571,7 +542,6 @@ const Home = () => {
         </AnimatePresence>
       </div>
       
-      {/* Pagination Controls */}
       {totalPages > 1 && (
         <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '40px' }}>
           {[...Array(totalPages)].map((_, i) => (
