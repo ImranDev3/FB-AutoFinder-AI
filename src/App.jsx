@@ -20,24 +20,28 @@ import {
   ShieldCheck,
   FileJson,
   Table,
-  ExternalLink
+  Globe,
+  CreditCard,
+  Target,
+  Layers,
+  FileText
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { mockGroups } from './data/mockData';
 import Analytics from './pages/Analytics';
 
-// --- Components ---
+// --- Enterprise Components ---
 
 const Sidebar = () => (
   <aside className="sidebar">
     <div className="logo">
       <Zap size={28} fill="currentColor" />
-      <span>AutoFinder PRO</span>
+      <span>MetaVision <span style={{ color: 'var(--accent-primary)', fontSize: '12px', verticalAlign: 'top' }}>ENTERPRISE</span></span>
     </div>
-    <nav style={{ marginTop: '20px' }}>
+    <nav style={{ marginTop: '30px' }}>
       <NavLink to="/" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
         <LayoutDashboard size={20} />
-        <span>Dashboard</span>
+        <span>Intelligence</span>
       </NavLink>
       <NavLink to="/analytics" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
         <BarChart2 size={20} />
@@ -45,16 +49,23 @@ const Sidebar = () => (
       </NavLink>
       <NavLink to="/history" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
         <History size={20} />
-        <span>Scan History</span>
+        <span>Data History</span>
+      </NavLink>
+      <NavLink to="/pricing" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+        <CreditCard size={20} />
+        <span>Subscriptions</span>
       </NavLink>
       <NavLink to="/settings" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
         <SettingsIcon size={20} />
-        <span>API Settings</span>
+        <span>Core Settings</span>
       </NavLink>
     </nav>
-    <div style={{ marginTop: 'auto', padding: '20px', background: 'rgba(0, 242, 255, 0.05)', borderRadius: '12px', border: '1px solid rgba(0, 242, 255, 0.1)' }}>
-      <p style={{ fontSize: '12px', color: 'var(--accent-primary)', fontWeight: '700', marginBottom: '5px' }}>PRO LICENSE ACTIVE</p>
-      <p style={{ fontSize: '10px', color: 'var(--text-muted)' }}>License: FB-PRO-9922-X</p>
+    <div style={{ marginTop: 'auto', padding: '20px', background: 'linear-gradient(rgba(0, 242, 255, 0.1), transparent)', borderRadius: '15px', border: '1px solid rgba(0, 242, 255, 0.2)' }}>
+      <p style={{ fontSize: '11px', color: 'var(--accent-primary)', fontWeight: '800', marginBottom: '8px' }}>CORPORATE PLAN</p>
+      <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden', marginBottom: '10px' }}>
+        <div style={{ width: '85%', height: '100%', background: 'var(--accent-primary)' }} />
+      </div>
+      <p style={{ fontSize: '10px', color: 'var(--text-muted)' }}>8,500 / 10,000 API Credits Used</p>
     </div>
   </aside>
 );
@@ -62,160 +73,60 @@ const Sidebar = () => (
 const Topbar = () => (
   <header className="topbar">
     <div style={{ position: 'relative' }}>
-      <h2 style={{ fontSize: '24px', fontWeight: '600' }}>Terminal <span style={{ color: 'var(--accent-primary)' }}>Dashboard</span></h2>
-      <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Enterprise-grade group discovery tool.</p>
+      <h2 style={{ fontSize: '22px', fontWeight: '700' }}>Global <span style={{ color: 'var(--accent-primary)' }}>Intelligence</span> Node</h2>
+      <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>Syncing with Meta Global Edge Servers...</p>
     </div>
     <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-      <div style={{ display: 'flex', gap: '15px', marginRight: '20px' }}>
-        <div style={{ textAlign: 'right' }}>
-          <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Server Status</p>
-          <p style={{ fontSize: '12px', color: '#22c55e', fontWeight: '700' }}>OPTIMIZED</p>
-        </div>
-        <div style={{ textAlign: 'right' }}>
-          <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Connection</p>
-          <p style={{ fontSize: '12px', color: 'var(--accent-primary)', fontWeight: '700' }}>ENCRYPTED</p>
-        </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--bg-hover)', padding: '8px 15px', borderRadius: '10px', border: '1px solid var(--border-color)', cursor: 'pointer' }}>
+        <Globe size={16} color="var(--accent-primary)" />
+        <span style={{ fontSize: '12px', fontWeight: '600' }}>English (US)</span>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'var(--bg-hover)', padding: '6px 12px', borderRadius: '30px', cursor: 'pointer', border: '1px solid var(--border-color)' }}>
-        <User size={18} />
-        <span style={{ fontWeight: '500' }}>Admin_Imran</span>
+      <div style={{ position: 'relative', cursor: 'pointer' }}>
+        <Bell size={20} color="var(--text-muted)" />
+        <span style={{ position: 'absolute', top: '-2px', right: '-2px', width: '8px', height: '8px', background: '#ef4444', borderRadius: '50%', border: '2px solid var(--bg-surface)' }}></span>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'var(--bg-hover)', padding: '6px 12px', borderRadius: '30px', cursor: 'pointer', border: '1px solid var(--accent-primary)' }}>
+        <div style={{ width: '28px', height: '28px', background: 'var(--accent-gradient)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '800' }}>IH</div>
+        <span style={{ fontWeight: '600', fontSize: '14px' }}>Imran Dev</span>
       </div>
     </div>
   </header>
 );
 
-const GroupDetailsModal = ({ group, onClose }) => (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(10px)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
-    onClick={onClose}
-  >
-    <motion.div
-      initial={{ scale: 0.9, y: 20 }}
-      animate={{ scale: 1, y: 0 }}
-      exit={{ scale: 0.9, y: 20 }}
-      className="card"
-      style={{ width: '100%', maxWidth: '700px', background: 'var(--bg-card)', border: '1px solid var(--accent-primary)', position: 'relative', overflow: 'hidden' }}
-      onClick={e => e.stopPropagation()}
-    >
-      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '4px', background: 'var(--accent-gradient)' }} />
-      <button onClick={onClose} style={{ position: 'absolute', top: '20px', right: '20px', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
-        <XCircle size={24} />
-      </button>
-      
-      <div style={{ display: 'flex', gap: '25px', marginBottom: '35px', padding: '10px' }}>
-        <div style={{ width: '120px', height: '120px', borderRadius: '15px', overflow: 'hidden', flexShrink: 0, boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
-          <img 
-            src={group.image || `https://picsum.photos/seed/${group.name}/200/200`} 
-            alt="Logo" 
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-          />
-        </div>
-        <div style={{ flex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-             <h2 style={{ fontSize: '28px' }}>{group.name}</h2>
-             <ShieldCheck size={24} color="var(--accent-primary)" />
-          </div>
-          <p style={{ color: 'var(--text-muted)', marginBottom: '15px' }}>{group.type} Community • ID: {group.id}</p>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <span style={{ background: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '700' }}>LIVE SCAN ACTIVE</span>
-            <span style={{ background: 'rgba(112, 0, 255, 0.1)', color: 'var(--accent-primary)', padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '700' }}>PRO DATA</span>
-          </div>
-        </div>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px', marginBottom: '30px' }}>
-        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '15px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-          <p style={{ color: 'var(--text-muted)', fontSize: '10px', textTransform: 'uppercase', marginBottom: '5px' }}>Auto-Approve</p>
-          <p style={{ fontSize: '14px', fontWeight: '800', color: group.autoApproval ? '#22c55e' : '#ef4444' }}>{group.autoApproval ? 'ON' : 'OFF'}</p>
-        </div>
-        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '15px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-          <p style={{ color: 'var(--text-muted)', fontSize: '10px', textTransform: 'uppercase', marginBottom: '5px' }}>Avg Likes</p>
-          <p style={{ fontSize: '14px', fontWeight: '800', color: 'var(--accent-primary)' }}>{group.avgEngagement?.likes || '120'}+</p>
-        </div>
-        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '15px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-          <p style={{ color: 'var(--text-muted)', fontSize: '10px', textTransform: 'uppercase', marginBottom: '5px' }}>Location</p>
-          <p style={{ fontSize: '11px', fontWeight: '700' }}>{group.location || 'Global'}</p>
-        </div>
-        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '15px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-          <p style={{ color: 'var(--text-muted)', fontSize: '10px', textTransform: 'uppercase', marginBottom: '5px' }}>Frequency</p>
-          <p style={{ fontSize: '11px', fontWeight: '700' }}>{group.postFrequency}</p>
-        </div>
-      </div>
-
-      <div style={{ background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '12px', marginBottom: '25px' }}>
-        <h4 style={{ fontSize: '14px', marginBottom: '10px', color: 'var(--accent-primary)' }}>Group Description & Rules</h4>
-        <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '10px' }}>{group.description}</p>
-        <p style={{ fontSize: '12px', color: 'var(--accent-primary)', fontFamily: 'monospace' }}>Rules: {group.rules}</p>
-      </div>
-
-      <div style={{ display: 'flex', gap: '15px' }}>
-        <button className="glow-btn" style={{ flex: 2, padding: '15px' }} onClick={() => window.open(group.url || `https://www.facebook.com/search/groups/?q=${encodeURIComponent(group.name)}`, '_blank')}>
-          JOIN GROUP ON FACEBOOK
-        </button>
-        <button 
-          onClick={() => { navigator.clipboard.writeText(group.url || ''); alert('URL Copied!'); }}
-          style={{ flex: 1, padding: '15px', borderRadius: '12px', background: 'var(--bg-hover)', border: '1px solid var(--border-color)', color: 'white', fontWeight: '700', cursor: 'pointer' }}
-        >
-          COPY URL
-        </button>
-      </div>
-    </motion.div>
-  </motion.div>
-);
-
-const GroupListItem = ({ group, onViewDetails }) => (
-  <motion.div 
-    layout
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="card"
-    style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
-      gap: '20px', 
-      padding: '12px', 
-      marginBottom: '16px',
-      background: 'rgba(255,255,255,0.02)',
-      border: '1px solid var(--border-color)',
-      borderRadius: '12px'
-    }}
-  >
-    <div style={{ position: 'relative', width: '70px', height: '70px', borderRadius: '10px', overflow: 'hidden', flexShrink: 0 }}>
-      <img src={group.image || `https://picsum.photos/seed/${group.name}/100/100`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+const PricingPage = () => (
+  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="page-content">
+    <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+      <h1 style={{ fontSize: '40px', marginBottom: '15px' }}>Enterprise <span style={{ color: 'var(--accent-primary)' }}>Scalability</span></h1>
+      <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto' }}>Choose a plan that fits your business needs. Upgrade anytime to unlock global data nodes.</p>
     </div>
-    <div style={{ flex: 1 }}>
-      <h4 style={{ fontSize: '16px', fontWeight: '700', marginBottom: '4px' }}>{group.name}</h4>
-      <div style={{ display: 'flex', gap: '15px', fontSize: '12px', color: 'var(--text-muted)' }}>
-        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Users size={12} /> {group.members}</span>
-        <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: group.autoApproval ? '#22c55e' : '#ef4444' }}>
-          <Zap size={12} fill="currentColor" /> {group.autoApproval ? 'Auto-Approve' : 'Admin Restricted'}
-        </span>
-        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={12} /> {group.postFrequency}</span>
-      </div>
-    </div>
-    <div style={{ display: 'flex', gap: '8px' }}>
-      <button 
-        onClick={() => window.open(`https://www.facebook.com/search/groups/?q=${encodeURIComponent(group.name)}`, '_blank')}
-        className="glow-btn" style={{ padding: '8px 16px', fontSize: '12px' }}
-      >
-        JOIN
-      </button>
-      <button 
-        onClick={() => onViewDetails(group)}
-        style={{ padding: '8px 16px', borderRadius: '8px', background: 'var(--bg-hover)', border: '1px solid var(--border-color)', color: 'white', fontSize: '12px', cursor: 'pointer' }}
-      >
-        ANALYSIS
-      </button>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '30px', maxWidth: '1100px', margin: '0 auto' }}>
+      {[
+        { name: 'Starter', price: '$49', features: ['1,000 Scans/mo', 'Excel Export', 'Email Support', 'Basic Analytics'], pro: false },
+        { name: 'Professional', price: '$149', features: ['10,000 Scans/mo', 'JSON/CSV Export', 'Priority API Access', 'Advanced Heatmaps'], pro: true },
+        { name: 'Enterprise', price: '$499', features: ['Unlimited Scans', 'Custom PDF Reports', 'Dedicated Account Manager', 'White-labeling'], pro: false }
+      ].map((plan, i) => (
+        <div key={i} className="card" style={{ textAlign: 'center', padding: '40px', position: 'relative', border: plan.pro ? '2px solid var(--accent-primary)' : '1px solid var(--border-color)' }}>
+          {plan.pro && <span style={{ position: 'absolute', top: '-15px', left: '50%', transform: 'translateX(-50%)', background: 'var(--accent-gradient)', padding: '5px 15px', borderRadius: '20px', fontSize: '12px', fontWeight: '800' }}>MOST POPULAR</span>}
+          <h3 style={{ fontSize: '24px', marginBottom: '10px' }}>{plan.name}</h3>
+          <h2 style={{ fontSize: '48px', marginBottom: '25px' }}>{plan.price}<span style={{ fontSize: '16px', color: 'var(--text-muted)' }}>/mo</span></h2>
+          <ul style={{ listStyle: 'none', padding: 0, marginBottom: '30px', textAlign: 'left' }}>
+            {plan.features.map((f, idx) => (
+              <li key={idx} style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: 'var(--text-muted)' }}>
+                <CheckCircle size={16} color="#22c55e" /> {f}
+              </li>
+            ))}
+          </ul>
+          <button className={plan.pro ? 'glow-btn' : 'export-btn'} style={{ width: '100%', padding: '15px' }}>{plan.name === 'Starter' ? 'Current Plan' : 'Upgrade Now'}</button>
+        </div>
+      ))}
     </div>
   </motion.div>
 );
+
+// --- Main App Logic ---
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState(() => localStorage.getItem('lastSearch') || '');
-  const [suggestions, setSuggestions] = useState([]);
   const [results, setResults] = useState(() => {
     const saved = localStorage.getItem('lastResults');
     return saved ? JSON.parse(saved) : mockGroups;
@@ -227,79 +138,19 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(() => parseInt(localStorage.getItem('lastPage')) || 1);
   const itemsPerPage = 10;
   const [terminalLogs, setTerminalLogs] = useState([]);
-  const [scanHistory, setScanHistory] = useState(() => {
-    const saved = localStorage.getItem('scanHistory');
-    return saved ? JSON.parse(saved) : [];
-  });
 
   useEffect(() => {
     localStorage.setItem('lastResults', JSON.stringify(results));
     localStorage.setItem('lastSearch', searchTerm);
     localStorage.setItem('lastFilter', filter);
     localStorage.setItem('lastPage', currentPage.toString());
-    localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
-  }, [results, searchTerm, filter, currentPage, scanHistory]);
-
-  const statuses = [
-    'Initializing Scraper Core...',
-    'Rotating US-Proxies (Residential)...',
-    'Bypassing Meta Security Wall...',
-    'Parsing Live DOM Tree...',
-    'Extracting Auto-Approve Nodes...',
-    'Finalizing Dataset...'
-  ];
+  }, [results, searchTerm, filter, currentPage]);
 
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(results);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Groups");
-    XLSX.writeFile(wb, `FB_Groups_${searchTerm || 'scan'}.xlsx`);
-  };
-
-  const exportToJSON = () => {
-    const blob = new Blob([JSON.stringify(results, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `FB_Groups_${searchTerm || 'scan'}.json`;
-    link.click();
-  };
-
-  const generateDynamicResults = (term) => {
-    const dynamic = [];
-    const niches = ['Marketing Hub', 'Freelance Community', 'Hiring Group', 'Buy & Sell', 'Tech Support', 'Crypto Alerts', 'Affiliate Network'];
-    const locations = ['New York, USA', 'London, UK', 'Dubai, UAE', 'Mumbai, India', 'Berlin, Germany', 'Sydney, Australia']    const communityImages = [
-      'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=200&h=200',
-      'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=200&h=200',
-      'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&q=80&w=200&h=200',
-      'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=200&h=200',
-      'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=200&h=200',
-      'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=200&h=200',
-      'https://images.unsplash.com/photo-1558403194-611308249627?auto=format&fit=crop&q=80&w=200&h=200'
-    ];
-    
-    for (let i = 1; i <= 50; i++) {
-      const niche = niches[i % niches.length];
-      const imageUrl = communityImages[i % communityImages.length];
-      dynamic.push({
-        id: `100${Date.now() + i}`,
-        name: `${term} ${niche} ${i}`,
-        members: `${(Math.random() * 500).toFixed(1)}K`,
-        activity: 'High',
-        type: 'Public',
-        autoApproval: Math.random() > 0.4,
-        postFrequency: `${Math.floor(Math.random() * 80) + 10} posts/day`,
-        image: imageUrl, // Fixed from hardcoded list
-        category: niche.split(' ')[0],
-        location: 'Global',
-        description: `Official ${term} group for networking and professional growth. High activity community.`,
-        rules: "1. Respect privacy. 2. No spam. 3. Be professional.",
-        avgEngagement: { likes: 150, comments: 45 },
-        url: `https://www.facebook.com/search/groups/?q=${encodeURIComponent(term)}`
-      });
-    }
-}
-    return dynamic;
+    XLSX.utils.book_append_sheet(wb, ws, "MetaVision_Export");
+    XLSX.writeFile(wb, `MetaVision_Data_${searchTerm || 'Global'}.xlsx`);
   };
 
   const handleSearch = async (term = searchTerm) => {
@@ -309,101 +160,93 @@ const Home = () => {
     setCurrentPage(1);
     
     const logs = [
-      `[PRO] Starting Scraper Engine...`,
-      `[NET] Connection established via Proxy Node #102`,
-      `[PARSER] Scanning https://facebook.com/search/groups/?q=${term}`,
-      `[INFO] Data packets received: 120kb`,
-      `[META] Meta Graph API v19.0 handshake: SUCCESS`
+      `[AUTH] Authenticating Intelligence Node... SUCCESS`,
+      `[NET] Connecting to Meta Backbone (Edge Location: US-WEST)...`,
+      `[SCAN] Initializing Deep Packet Inspection for query: ${term}`,
+      `[INFO] Parsing Group permission nodes... 145 items found`,
+      `[DB] Indexing discovered entities... OK`
     ];
 
-    for (let i = 0; i < statuses.length; i++) {
-      setScanStatus(statuses[i]);
+    for (let i = 0; i < 6; i++) {
+      setScanStatus(['Initializing...', 'Proxy Handshake...', 'Bypassing WAF...', 'Parsing Data...', 'Applying Filters...', 'Syncing...'][i]);
       if (logs[i]) setTerminalLogs(p => [...p, logs[i]]);
       await new Promise(r => setTimeout(r, 600));
     }
     
     let filtered = mockGroups.filter(g => g.name.toLowerCase().includes(term.toLowerCase()));
-    if (filtered.length === 0) filtered = generateDynamicResults(term);
-    
-    setResults(filtered);
-    setScanHistory(prev => [{ term, count: filtered.length, date: new Date().toLocaleTimeString() }, ...prev]);
+    setResults(filtered.length ? filtered : mockGroups);
     setIsScanning(false);
   };
-
-  const handleFilterChange = (f) => {
-    setFilter(f);
-    setCurrentPage(1);
-  };
-
-  const currentItems = results.slice((currentPage-1)*itemsPerPage, currentPage*itemsPerPage);
-  const totalPages = Math.ceil(results.length / itemsPerPage);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <AnimatePresence>
         {isScanning && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="scanning-overlay">
-            <Zap size={60} color="var(--accent-primary)" className="pulse-animation" />
-            <h2 style={{ fontSize: '32px', marginTop: '20px' }}>{scanStatus}</h2>
-            <div className="terminal-box">
-              {terminalLogs.map((l, i) => <div key={i}>{l}</div>)}
-              <div>_</div>
-            </div>
+             <div style={{ position: 'relative' }}>
+                <Zap size={80} color="var(--accent-primary)" className="pulse-animation" />
+                <div style={{ position: 'absolute', inset: -20, border: '2px solid var(--accent-primary)', borderRadius: '50%', opacity: 0.2, animation: 'pulse 2s infinite' }} />
+             </div>
+             <h2 style={{ fontSize: '36px', marginTop: '30px', letterSpacing: '2px' }}>{scanStatus}</h2>
+             <div className="terminal-box">
+                {terminalLogs.map((l, i) => <div key={i}>{l}</div>)}
+                <div style={{ color: 'var(--accent-primary)' }}>>>> READY</div>
+             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <AnimatePresence>{selectedGroup && <GroupDetailsModal group={selectedGroup} onClose={() => setSelectedGroup(null)} />}</AnimatePresence>
-
-      <div className="hero-section">
-        <h1>Deep <span style={{ color: 'var(--accent-primary)' }}>Meta</span> Scraper PRO</h1>
-        <p>Enterprise solution for high-frequency Facebook group discovery and analysis.</p>
-        
-        <div className="search-bar-pro">
-          <Search size={20} color="var(--text-muted)" />
-          <input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} onKeyPress={e => e.key === 'Enter' && handleSearch()} placeholder="Enter keywords (e.g. Paid VPN, Crypto)..." />
-          <button onClick={() => handleSearch()} className="glow-btn">SCRAPE LIVE DATA</button>
-        </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '30px', marginBottom: '40px' }}>
+         <div className="card" style={{ padding: '60px 40px', background: 'linear-gradient(135deg, rgba(112, 0, 255, 0.1), transparent)' }}>
+            <h1 style={{ fontSize: '42px', marginBottom: '20px' }}>Data <span style={{ color: 'var(--accent-primary)' }}>Intelligence</span> Explorer</h1>
+            <p style={{ color: 'var(--text-muted)', marginBottom: '40px', fontSize: '18px' }}>Real-time extraction of Facebook group metrics and permission nodes.</p>
+            <div className="search-bar-pro">
+              <Search size={22} color="var(--text-muted)" />
+              <input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} onKeyPress={e => e.key === 'Enter' && handleSearch()} placeholder="Query Intelligence Database..." />
+              <button onClick={() => handleSearch()} className="glow-btn">SCRAPE LIVE</button>
+            </div>
+         </div>
+         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div className="card" style={{ padding: '25px', textAlign: 'center' }}>
+               <Target size={32} color="var(--accent-primary)" style={{ marginBottom: '10px' }} />
+               <h4>Accuracy Rate</h4>
+               <h2 style={{ color: '#22c55e' }}>99.8%</h2>
+            </div>
+            <div className="card" style={{ padding: '25px', textAlign: 'center' }}>
+               <Layers size={32} color="var(--accent-primary)" style={{ marginBottom: '10px' }} />
+               <h4>Active Nodes</h4>
+               <h2>1.2M</h2>
+            </div>
+         </div>
       </div>
 
       <div className="results-header">
         <div style={{ display: 'flex', gap: '15px' }}>
-           <button onClick={exportToExcel} className="export-btn"><Table size={16} /> Excel</button>
-           <button onClick={exportToJSON} className="export-btn"><FileJson size={16} /> JSON</button>
+           <button onClick={exportToExcel} className="export-btn"><FileText size={18} /> Professional Report</button>
         </div>
         <div className="filter-group">
           {['All', 'Auto-Approval', 'High Activity'].map(f => (
-            <button key={f} onClick={() => handleFilterChange(f)} className={`filter-btn ${filter === f ? 'active' : ''}`}>{f}</button>
+            <button key={f} onClick={() => { setFilter(f); setCurrentPage(1); }} className={`filter-btn ${filter === f ? 'active' : ''}`}>{f}</button>
           ))}
         </div>
       </div>
 
       <div className="results-container">
-        {currentItems.map(g => <GroupListItem key={g.id} group={g} onViewDetails={setSelectedGroup} />)}
+        {results.slice((currentPage-1)*itemsPerPage, currentPage*itemsPerPage).map(g => (
+          <div key={g.id} className="card" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '15px', marginBottom: '15px', border: '1px solid var(--border-color)' }}>
+             <img src={g.image} style={{ width: '60px', height: '60px', borderRadius: '10px', objectFit: 'cover' }} />
+             <div style={{ flex: 1 }}>
+                <h4 style={{ fontSize: '16px', fontWeight: '700' }}>{g.name}</h4>
+                <div style={{ display: 'flex', gap: '20px', fontSize: '12px', color: 'var(--text-muted)', marginTop: '5px' }}>
+                   <span>{g.members} members</span>
+                   <span style={{ color: g.autoApproval ? '#22c55e' : '#ef4444' }}>{g.autoApproval ? 'AUTO-APPROVE' : 'MODERATED'}</span>
+                   <span>{g.location}</span>
+                </div>
+             </div>
+             <button onClick={() => window.open(`https://www.facebook.com/search/groups/?q=${encodeURIComponent(g.name)}`, '_blank')} className="export-btn">JOIN</button>
+          </div>
+        ))}
       </div>
-
-      {totalPages > 1 && (
-        <div className="pagination">
-          {[...Array(totalPages)].map((_, i) => (
-            <button key={i} onClick={() => setCurrentPage(i+1)} className={`page-btn ${currentPage === i+1 ? 'active' : ''}`}>{i+1}</button>
-          ))}
-        </div>
-      )}
-    </motion.div>
-  );
-};
-
-const HistoryView = () => {
-  const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card">
-      <h2 style={{ marginBottom: '20px' }}>Recent Scan History</h2>
-      {history.length === 0 ? <p color="var(--text-muted)">No history yet.</p> : (
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead><tr style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border-color)' }}><th align="left">Keyword</th><th>Found</th><th>Time</th></tr></thead>
-          <tbody>{history.map((h, i) => <tr key={i} style={{ borderBottom: '1px solid var(--border-color)' }}><td style={{ padding: '15px' }}>{h.term}</td><td align="center">{h.count}</td><td align="center">{h.date}</td></tr>)}</tbody>
-        </table>
-      )}
     </motion.div>
   );
 };
@@ -419,8 +262,9 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/analytics" element={<Analytics />} />
-              <Route path="/history" element={<HistoryView />} />
-              <Route path="/settings" element={<div className="card"><h2>Settings</h2><p>Proxy configurations and API keys.</p></div>} />
+              <Route path="/pricing" element={<PricingPage />} />
+              <Route path="/history" element={<div className="card"><h2>Scan History</h2><p>Enterprise data logging active.</p></div>} />
+              <Route path="/settings" element={<div className="card"><h2>Settings</h2><p>System configuration panel.</p></div>} />
             </Routes>
           </div>
         </main>
